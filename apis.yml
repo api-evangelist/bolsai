@@ -1,46 +1,44 @@
-name: bolsai
+name: Bolsai
 description: >-
-  Brazilian financial-market data API — B3 stocks (ações), real-estate funds (FIIs), fundamentals, dividends, financial
-  statements, and macro series. Data sourced from official providers B3, CVM, and BCB (Brazil's central bank).
+  Brazilian financial-market data REST API serving equities, real-estate funds (FIIs), fundamentals, dividends,
+  financial statements, and macroeconomic series sourced from official feeds (B3, CVM, BCB).
 url: https://bolsai.apievangelist.com/apis.yml
-created: '2026-07-04'
-modified: '2026-07-04'
+created: '2026-07-06'
+modified: '2026-07-06'
 specificationVersion: '0.21'
 tags:
   - finance
-  - financial-market-data
+  - financial-data
+  - market-data
   - stocks-equities
-  - REITs
   - real-estate-funds
-  - fundamentals
   - dividends
+  - fundamentals
   - macroeconomic-data
   - brazil
-  - B3
   - developer-tools
   - mcp
-  - agent-native
+  - ai-agents
 apis:
-  - name: bolsai REST API
+  - name: Bolsai Financial Data API
     description: >-
-      Brazilian financial-market data REST API covering companies, stocks, screener, fundamentals, financial statements,
-      dividends, FIIs, and macro series. Authenticated via X-API-Key header.
+      REST/JSON API for Brazilian financial-market data — equities, FIIs, fundamentals, dividends, financial statements,
+      and macro series. Authenticated via X-API-Key header.
     humanURL: https://usebolsai.com/docs
     baseURL: https://api.usebolsai.com/api/v1
     tags:
       - finance
-      - financial-market-data
+      - financial-data
+      - market-data
       - stocks-equities
-      - REITs
       - real-estate-funds
-      - fundamentals
       - dividends
+      - fundamentals
       - macroeconomic-data
       - brazil
-      - B3
       - developer-tools
       - mcp
-      - agent-native
+      - ai-agents
     properties:
       - type: OpenAPI
         url: https://usebolsai.com/openapi.json
@@ -49,10 +47,10 @@ apis:
       - type: LLMSTxt
         url: https://usebolsai.com/llms.txt
 maintainers:
-  - FN: bolsai
+  - FN: Bolsai
     url: https://usebolsai.com
 generated:
   by: apis.io/add
   model: claude-opus-4-8
-  confidence: 95
-  at: '2026-07-04T13:32:36.233Z'
+  confidence: 90
+  at: '2026-07-06T15:21:36.821Z'
