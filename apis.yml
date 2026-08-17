@@ -14,7 +14,7 @@ name: Bolsai
 description: >-
   Brazilian financial-market data REST API serving equities, real-estate funds (FIIs), fundamentals, dividends,
   financial statements, and macroeconomic series sourced from official feeds (B3, CVM, BCB).
-url: https://bolsai.apievangelist.com/apis.yml
+url: https://raw.githubusercontent.com/api-evangelist/bolsai/refs/heads/main/apis.yml
 created: '2026-07-06'
 modified: '2026-07-06'
 specificationVersion: '0.21'
