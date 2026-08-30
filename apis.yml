@@ -33,12 +33,12 @@ tags:
   - Finance
   - Financial Data
   - Market Data
-  - Stocks/equities
-  - Real Estate Funds
-  - Dividends
+  - stocks-equities
+  - real-estate-funds
+  - dividends
   - Fundamentals
-  - Macroeconomic Data
-  - Brazil
+  - macroeconomic-data
+  - brazil
   - Developer Tools
   - MCP
   - AI Agents
@@ -66,12 +66,12 @@ apis:
       - Finance
       - Financial Data
       - Market Data
-      - Stocks/equities
-      - Real Estate Funds
-      - Dividends
+      - stocks-equities
+      - real-estate-funds
+      - dividends
       - Fundamentals
-      - Macroeconomic Data
-      - Brazil
+      - macroeconomic-data
+      - brazil
       - Developer Tools
       - MCP
       - AI Agents
