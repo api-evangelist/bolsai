@@ -1,0 +1,100 @@
+generated: '2026-09-03'
+method: derived
+source: mcp/bolsai-mcp.yml + openapi/bolsai-openapi.json
+note: >-
+  The live MCP endpoint is OAuth-gated (tools/list returns 401 anonymously), so
+  tools were mapped by name/semantics from the provider's published tool list to
+  the OpenAPI operations they wrap. Schemas need authenticated introspection.
+surfaces:
+  openapi: openapi/bolsai-openapi.json
+  mcp: https://usebolsai.com/api/mcp (OAuth-gated)
+  graphql: null
+crosswalk:
+  - tool: screen_stocks
+    category: screener
+    rest: [screen_stocks_api_v1_screener__get]
+    binding: wraps
+    confidence: high
+  - tool: get_fundamentals
+    category: fundamentals
+    rest: [get_fundamentals_api_v1_fundamentals__ticker__get]
+    binding: wraps
+    confidence: high
+  - tool: get_dividends
+    category: dividends
+    rest: [get_dividends_api_v1_dividends__ticker__get]
+    binding: wraps
+    confidence: high
+  - tool: get_financial_statements
+    category: financials
+    rest: [get_financials_api_v1_financials__ticker__get]
+    binding: wraps
+    confidence: high
+  - tool: get_fii_details
+    category: fiis
+    rest:
+      - get_fii_fundamentals_api_v1_fiis__ticker__get
+      - get_fii_distributions_api_v1_fiis__ticker__distributions_get
+    binding: composes
+    confidence: medium
+    note: Provider describes the tool as fundamentals AND monthly distributions — two REST operations.
+  - tool: get_price_history
+    category: stocks
+    rest: [stock_history_api_v1_stocks__ticker__history_get]
+    binding: wraps
+    confidence: high
+  - tool: get_macro_indicator
+    category: macro
+    rest: [get_series_api_v1_macro__series_name__get]
+    binding: wraps
+    confidence: high
+  - tool: get_stock_quote
+    category: stocks
+    rest: [stock_quote_api_v1_stocks__ticker__quote_get]
+    binding: wraps
+    confidence: high
+  - tool: search_companies
+    category: companies
+    rest: [list_companies_api_v1_companies__get]
+    binding: wraps
+    confidence: high
+  - tool: list_sectors
+    category: companies
+    rest: [list_sectors_api_v1_companies_sectors_get]
+    binding: wraps
+    confidence: high
+  - tool: compare_stocks
+    category: fundamentals
+    rest: [get_fundamentals_api_v1_fundamentals__ticker__get]
+    binding: composes
+    confidence: medium
+    note: Composite — fans out the fundamentals operation across up to 5 tickers; no single REST op.
+mcp_only: []
+rest_only:
+  # Account/control-plane and detail operations with no MCP tool
+  - health_check_health_get
+  - list_keys_api_v1_keys_get
+  - create_key_api_v1_keys_post
+  - rotate_key_api_v1_keys__key_id__rotate_post
+  - delete_key_api_v1_keys__key_id__delete
+  - get_playground_token_api_v1_keys_playground_token_get
+  - get_usage_api_v1_keys_usage_get
+  - get_company_api_v1_companies__ticker__get
+  - list_tickers_api_v1_stocks__get
+  - all_corporate_events_api_v1_stocks_corporate_events_get
+  - stock_stats_api_v1_stocks__ticker__stats_get
+  - stock_corporate_events_api_v1_stocks__ticker__corporate_events_get
+  - ticker_history_api_v1_stocks__ticker__ticker_history_get
+  - get_fundamentals_history_api_v1_fundamentals__ticker__history_get
+  - list_fiis_api_v1_fiis__get
+  - screen_fiis_api_v1_fiis_screener_get
+  - get_fii_history_api_v1_fiis__ticker__history_get
+  - get_fii_tenants_api_v1_fiis__ticker__tenants_get
+  - list_series_api_v1_macro__get
+  - get_series_stats_api_v1_macro__series_name__stats_get
+coverage:
+  mcp_tools: 11
+  mapped: 11
+  mcp_only: 0
+  rest_operations_public_data_plane: 26
+  rest_only_listed: 20

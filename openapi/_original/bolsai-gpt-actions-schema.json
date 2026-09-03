@@ -1,0 +1,249 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "bolsai — API de Dados Financeiros do Brasil",
+    "description": "API REST com dados financeiros do mercado brasileiro: ações, FIIs, fundamentos, dividendos, demonstrações financeiras e indicadores macro. Dados oficiais da B3, CVM e BCB.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://usebolsai.com/api/v1"
+    }
+  ],
+  "paths": {
+    "/stocks/": {
+      "get": {
+        "operationId": "listTickers",
+        "summary": "Lista todos os tickers disponíveis",
+        "description": "Lista tickers de ações (02), FIIs (12) ou BDRs (14) com paginação.",
+        "parameters": [
+          {"name": "bdi_code", "in": "query", "schema": {"type": "string", "default": "02", "enum": ["02", "12", "14"]}, "description": "02=ações, 12=FIIs, 14=BDRs"},
+          {"name": "limit", "in": "query", "schema": {"type": "integer", "default": 500, "minimum": 1, "maximum": 5000}},
+          {"name": "offset", "in": "query", "schema": {"type": "integer", "default": 0, "minimum": 0}}
+        ],
+        "responses": {"200": {"description": "Lista de tickers"}}
+      }
+    },
+    "/stocks/{ticker}/quote": {
+      "get": {
+        "operationId": "getStockQuote",
+        "summary": "Cotação atual de uma ação",
+        "description": "Retorna o preço mais recente: open, high, low, close, volume.",
+        "parameters": [
+          {"name": "ticker", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[A-Za-z]{4}\\d{0,2}$"}, "description": "Ticker da ação (ex: PETR4, VALE3)"}
+        ],
+        "responses": {"200": {"description": "Cotação atual"}}
+      }
+    },
+    "/stocks/{ticker}/history": {
+      "get": {
+        "operationId": "getStockHistory",
+        "summary": "Histórico de preços diários",
+        "description": "Preços OHLCV diários ajustados por splits e dividendos. Dados desde 1986.",
+        "parameters": [
+          {"name": "ticker", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[A-Za-z]{4}\\d{0,2}$"}},
+          {"name": "start", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Data início (YYYY-MM-DD)"},
+          {"name": "end", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Data fim (YYYY-MM-DD)"},
+          {"name": "limit", "in": "query", "schema": {"type": "integer", "default": 252, "minimum": 1, "maximum": 5000}, "description": "Máximo de registros (252 = 1 ano)"}
+        ],
+        "responses": {"200": {"description": "Array de preços diários"}}
+      }
+    },
+    "/stocks/{ticker}/stats": {
+      "get": {
+        "operationId": "getStockStats",
+        "summary": "Estatísticas de preço",
+        "description": "Máxima/mínima 52 semanas, retorno YTD, variação diária, volume médio.",
+        "parameters": [
+          {"name": "ticker", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[A-Za-z]{4}\\d{0,2}$"}}
+        ],
+        "responses": {"200": {"description": "Estatísticas de preço"}}
+      }
+    },
+    "/stocks/{ticker}/corporate-events": {
+      "get": {
+        "operationId": "getStockCorporateEvents",
+        "summary": "Splits e desdobramentos",
+        "description": "Detecta splits e grupamentos de uma ação.",
+        "parameters": [
+          {"name": "ticker", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[A-Za-z]{4}\\d{0,2}$"}}
+        ],
+        "responses": {"200": {"description": "Lista de eventos corporativos"}}
+      }
+    },
+    "/stocks/{ticker}/ticker-history": {
+      "get": {
+        "operationId": "getTickerHistory",
+        "summary": "Histórico de renomeações do ticker",
+        "description": "Mostra todas as mudanças de ticker da empresa (ex: VIIA3 → BHIA3).",
+        "parameters": [
+          {"name": "ticker", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[A-Za-z]{4}\\d{0,2}$"}}
+        ],
+        "responses": {"200": {"description": "Cadeia de renomeações"}}
+      }
+    },
+    "/fundamentals/{ticker}": {
+      "get": {
+        "operationId": "getFundamentals",
+        "summary": "Indicadores fundamentalistas atuais",
+        "description": "27+ indicadores: P/L (pl), P/VP (pvp), EV/EBITDA (ev_ebitda), ROE (roe), ROA (roa), ROIC (roic), margem líquida (net_margin), margem bruta (gross_margin), dividend yield (dividend_yield), dívida/patrimônio (debt_equity), LPA (lpa), VPA (vpa).",
+        "parameters": [
+          {"name": "ticker", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[A-Za-z]{4}\\d{0,2}$"}},
+          {"name": "reference_date", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Data de referência específica (opcional)"}
+        ],
+        "responses": {"200": {"description": "Indicadores fundamentalistas"}}
+      }
+    },
+    "/fundamentals/{ticker}/history": {
+      "get": {
+        "operationId": "getFundamentalsHistory",
+        "summary": "Histórico trimestral de fundamentos",
+        "description": "Fundamentos trimestrais desde 2010. Cada período contém todos os indicadores.",
+        "parameters": [
+          {"name": "ticker", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[A-Za-z]{4}\\d{0,2}$"}},
+          {"name": "limit", "in": "query", "schema": {"type": "integer", "default": 40, "minimum": 1, "maximum": 80}, "description": "Número de trimestres"}
+        ],
+        "responses": {"200": {"description": "Array de fundamentos trimestrais"}}
+      }
+    },
+    "/financials/{ticker}": {
+      "get": {
+        "operationId": "getFinancialStatements",
+        "summary": "Demonstrações financeiras da CVM",
+        "description": "DRE, balanço patrimonial (BPA/BPP), fluxo de caixa (DFC_MI) e DVA. Dados brutos da CVM.",
+        "parameters": [
+          {"name": "ticker", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[A-Za-z]{4}\\d{0,2}$"}},
+          {"name": "report_type", "in": "query", "schema": {"type": "string", "enum": ["DFP", "ITR"], "default": "DFP"}, "description": "DFP=anual, ITR=trimestral"},
+          {"name": "statement_type", "in": "query", "schema": {"type": "string", "enum": ["BPA", "BPP", "DRE", "DFC_MI", "DVA"]}, "description": "Tipo de demonstração"},
+          {"name": "reference_date", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Data de referência"},
+          {"name": "limit", "in": "query", "schema": {"type": "integer", "default": 1000, "minimum": 1, "maximum": 5000}}
+        ],
+        "responses": {"200": {"description": "Linhas do demonstrativo financeiro"}}
+      }
+    },
+    "/dividends/{ticker}": {
+      "get": {
+        "operationId": "getDividends",
+        "summary": "Histórico de dividendos e JCP",
+        "description": "Dividend yield TTM, resumo anual e lista de pagamentos. Funciona para ações e FIIs.",
+        "parameters": [
+          {"name": "ticker", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[A-Za-z]{4}\\d{0,2}$"}},
+          {"name": "years", "in": "query", "schema": {"type": "integer", "default": 5, "minimum": 1, "maximum": 20}, "description": "Anos de histórico"}
+        ],
+        "responses": {"200": {"description": "Histórico de dividendos"}}
+      }
+    },
+    "/fiis/": {
+      "get": {
+        "operationId": "listFIIs",
+        "summary": "Lista todos os FIIs",
+        "description": "Lista fundos imobiliários com segmento, tipo de gestão e número de cotistas.",
+        "parameters": [
+          {"name": "limit", "in": "query", "schema": {"type": "integer", "default": 500, "minimum": 1, "maximum": 5000}},
+          {"name": "offset", "in": "query", "schema": {"type": "integer", "default": 0, "minimum": 0}}
+        ],
+        "responses": {"200": {"description": "Lista de FIIs"}}
+      }
+    },
+    "/fiis/{ticker}": {
+      "get": {
+        "operationId": "getFIIDetails",
+        "summary": "Fundamentos de um FII",
+        "description": "P/VP, dividend yield TTM, valor patrimonial, NAV, cotistas, segmento.",
+        "parameters": [
+          {"name": "ticker", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[A-Za-z]{4}\\d{0,2}$"}, "description": "Ticker do FII (ex: HGLG11 ou HGLG)"}
+        ],
+        "responses": {"200": {"description": "Fundamentos do FII"}}
+      }
+    },
+    "/fiis/{ticker}/history": {
+      "get": {
+        "operationId": "getFIIHistory",
+        "summary": "Histórico mensal do FII",
+        "description": "P/VP, dividend yield, NAV e cotistas mês a mês.",
+        "parameters": [
+          {"name": "ticker", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[A-Za-z]{4}\\d{0,2}$"}},
+          {"name": "limit", "in": "query", "schema": {"type": "integer", "default": 24, "minimum": 1, "maximum": 120}, "description": "Meses de histórico"}
+        ],
+        "responses": {"200": {"description": "Histórico mensal"}}
+      }
+    },
+    "/fiis/{ticker}/distributions": {
+      "get": {
+        "operationId": "getFIIDistributions",
+        "summary": "Histórico de distribuições do FII",
+        "description": "Rendimentos mensais R$/cota, DY mensal, resumo anual e yield TTM.",
+        "parameters": [
+          {"name": "ticker", "in": "path", "required": true, "schema": {"type": "string", "pattern": "^[A-Za-z]{4}\\d{0,2}$"}},
+          {"name": "years", "in": "query", "schema": {"type": "integer", "default": 5, "minimum": 1, "maximum": 20}}
+        ],
+        "responses": {"200": {"description": "Histórico de distribuições"}}
+      }
+    },
+    "/companies/": {
+      "get": {
+        "operationId": "listCompanies",
+        "summary": "Buscar empresas",
+        "description": "Busca por nome, setor ou status. Retorna dados cadastrais da B3.",
+        "parameters": [
+          {"name": "sector", "in": "query", "schema": {"type": "string"}, "description": "Filtrar por setor"},
+          {"name": "status", "in": "query", "schema": {"type": "string", "default": "ATIVO"}, "description": "ATIVO, INATIVO ou ALL"},
+          {"name": "search", "in": "query", "schema": {"type": "string", "maxLength": 100}, "description": "Busca por nome"},
+          {"name": "limit", "in": "query", "schema": {"type": "integer", "default": 50, "minimum": 1, "maximum": 500}},
+          {"name": "offset", "in": "query", "schema": {"type": "integer", "default": 0, "minimum": 0}}
+        ],
+        "responses": {"200": {"description": "Lista de empresas"}}
+      }
+    },
+    "/companies/{ticker}": {
+      "get": {
+        "operationId": "getCompanyDetails",
+        "summary": "Detalhes de uma empresa",
+        "description": "CNPJ, setor, subsetor, data de listagem, código CVM.",
+        "parameters": [
+          {"name": "ticker", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "responses": {"200": {"description": "Detalhes da empresa"}}
+      }
+    },
+    "/macro/": {
+      "get": {
+        "operationId": "listMacroSeries",
+        "summary": "Lista séries macro disponíveis",
+        "description": "Séries disponíveis: selic, selic_target, ipca, cdi, usd_brl, eur_brl, igpm.",
+        "responses": {"200": {"description": "Séries disponíveis"}}
+      }
+    },
+    "/macro/{series_name}": {
+      "get": {
+        "operationId": "getMacroSeries",
+        "summary": "Dados de indicador macroeconômico",
+        "description": "Séries históricas do Banco Central: SELIC, IPCA, CDI, IGP-M e câmbio USD/BRL e EUR/BRL.",
+        "parameters": [
+          {"name": "series_name", "in": "path", "required": true, "schema": {"type": "string", "enum": ["selic", "selic_target", "ipca", "cdi", "usd_brl", "eur_brl", "igpm"]}},
+          {"name": "start", "in": "query", "schema": {"type": "string", "format": "date"}},
+          {"name": "end", "in": "query", "schema": {"type": "string", "format": "date"}},
+          {"name": "limit", "in": "query", "schema": {"type": "integer", "default": 252, "minimum": 1, "maximum": 5000}}
+        ],
+        "responses": {"200": {"description": "Série temporal"}}
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://usebolsai.com/api/v1/oauth/authorize",
+            "tokenUrl": "https://usebolsai.com/api/v1/oauth/token",
+            "scopes": {}
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {"oauth2": []}
+  ]
+}

@@ -1,0 +1,56 @@
+generated: '2026-09-03'
+method: searched
+source: openapi/bolsai-openapi.json
+docs: https://usebolsai.com/docs
+summary:
+  types:
+  - apiKey
+  - oauth2
+  api_key_in:
+  - header
+  - query
+schemes:
+- name: ApiKeyHeader
+  type: apiKey
+  in: header
+  parameter: X-API-Key
+  description: Get your key at POST /api/v1/keys/register
+  sources:
+  - openapi/bolsai-openapi.json
+- name: ApiKeyQuery
+  type: apiKey
+  in: query
+  parameter: api_key
+  description: Documented alternative to the header in llms.txt ("?api_key=...").
+  sources:
+  - https://usebolsai.com/llms.txt
+- name: BearerToken
+  type: http
+  scheme: bearer
+  description: 'Documented alternative in llms.txt ("Authorization: Bearer ..."); also the token style for the hosted MCP endpoint.'
+  sources:
+  - https://usebolsai.com/llms.txt
+- name: McpOAuth
+  type: oauth2
+  flow: authorization_code
+  authorization_url: https://usebolsai.com/api/v1/oauth/authorize
+  token_url: https://usebolsai.com/api/v1/oauth/token
+  registration_url: https://usebolsai.com/api/v1/oauth/register
+  pkce: S256
+  scopes: {}
+  description: >-
+    OAuth 2.0 authorization server (RFC 8414 metadata live at
+    /.well-known/oauth-authorization-server) protecting the hosted MCP endpoint
+    https://usebolsai.com/api/mcp (RFC 9728) and used by the ChatGPT GPT-Actions
+    integration. Public clients with PKCE; no scopes are published.
+  sources:
+  - https://usebolsai.com/.well-known/oauth-authorization-server
+  - https://usebolsai.com/mcp
+key_management:
+  signup: Google login at https://usebolsai.com (free, no card)
+  active_key_limits: {Free: 5, Pro: 20}
+  operations:
+    create: create_key_api_v1_keys_post
+    rotate: rotate_key_api_v1_keys__key_id__rotate_post
+    delete: delete_key_api_v1_keys__key_id__delete
+    usage: get_usage_api_v1_keys_usage_get

@@ -1,0 +1,27 @@
+generated: '2026-09-03'
+method: searched
+source: https://usebolsai.com/docs
+limit_count: 2
+limits:
+  - plan: Free
+    scope: per-account
+    window: 1 day
+    limit: 200
+    burst: null
+    note: Daily quota, reset at midnight UTC ("Os limites são resetados à meia-noite UTC").
+  - plan: Pro
+    scope: per-account
+    window: 1 day
+    limit: 10000
+    burst: null
+    note: Daily quota, reset at midnight UTC.
+headers:
+  - X-RateLimit-Remaining
+exhaustion:
+  status: 429
+  body: Too Many Requests
+notes: >-
+  Quotas are plan-level daily allowances rather than per-second throttles; no
+  per-endpoint or burst limits are documented. Usage is queryable at
+  GET /api/v1/keys/usage. Enterprise plan advertises "Requisições sob demanda"
+  (on-demand request volume).

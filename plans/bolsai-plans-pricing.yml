@@ -1,0 +1,57 @@
+generated: '2026-09-03'
+method: searched
+source: https://usebolsai.com/#pricing
+plan_count: 3
+currency: BRL
+plans:
+  - name: Free
+    price: 0
+    currency: BRL
+    billing_period: none
+    included_quota: 200 requests/day
+    limits:
+      requests_per_day: 200
+      active_api_keys: 5
+    features:
+      - Current quotes and fundamentals
+      - All public endpoints (current data)
+    overage: none — 429 after the daily quota
+  - name: Pro
+    price: 49
+    currency: BRL
+    billing_period: month
+    list_price: 79
+    promo_note: Launch discount badge "-38%" against a struck-through R$79/mês
+    alternate_billing:
+      - period: quarter
+        price: 129
+        effective_monthly: 43
+        note: Save 10%
+      - period: year
+        price: 499
+        effective_monthly: 41
+        note: 2 months free
+    included_quota: 10,000 requests/day
+    limits:
+      requests_per_day: 10000
+      active_api_keys: 20
+    features:
+      - Full historical data (prices since 1986)
+      - All endpoints (dividends, statements, macro history)
+      - Priority support
+      - Cancel anytime via Stripe
+    overage: none — 429 after the daily quota
+  - name: Enterprise
+    price: 199
+    currency: BRL
+    billing_period: month
+    price_note: '"a partir de" (from) R$199/mês · quarterly from R$499 (R$166/mês) · yearly from R$1.899 (R$158/mês)'
+    included_quota: on-demand ("Requisições sob demanda")
+    contact: vinicius.lazzari@usebolsai.com
+    features:
+      - Custom request volume
+      - Tailored terms ("sob medida")
+notes: >-
+  Pricing is published on the landing page #pricing section (no standalone
+  /pricing page — it 404s). Checkout runs through Stripe
+  (GET|POST /api/v1/billing/checkout, portal at /api/v1/billing/portal).

@@ -1,35 +1,71 @@
 deliveryModel:
-  model: unknown
+  model: saas
   open_source: false
-  commercial: false
-  callable_host: false
-  label: Delivery model not determined — needs a product licence on record
-  confidence: low
+  commercial: true
+  callable_host: true
+  label: Hosted SaaS API on api.usebolsai.com with free and paid plans
+  confidence: high
   source:
-  - none
-  generated: '2026-08-28'
+  - https://usebolsai.com/llms.txt
+  - https://usebolsai.com/#pricing
+  generated: '2026-09-03'
   method: derived
 accessModel:
-  pricing: unknown
-  onboarding: unknown
-  trial: false
-  try_now: false
-  public: false
-  label: Unknown
-  confidence: low
-  source: []
-  generated: '2026-07-22'
+  pricing: freemium
+  onboarding: self-serve
+  trial: true
+  try_now: true
+  public: true
+  label: Self-serve freemium — Google login, free 200 req/day tier, in-browser playground
+  confidence: high
+  source:
+  - https://usebolsai.com/#pricing
+  - https://usebolsai.com/#playground
+  generated: '2026-09-03'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/bolsai.png
 name: Bolsai
-description: >-
-  Brazilian financial-market data REST API serving equities, real-estate funds (FIIs), fundamentals, dividends,
-  financial statements, and macroeconomic series sourced from official feeds (B3, CVM, BCB).
+description: Brazilian financial-market data REST API serving equities, real-estate funds (FIIs), fundamentals,
+  dividends, financial statements, and macroeconomic series sourced from official feeds (B3, CVM, BCB). Covers 350+
+  B3 stocks, 400+ FIIs and 40 years of price history, with an official MCP server (hosted OAuth endpoint and PyPI
+  package) for AI agents.
 url: https://raw.githubusercontent.com/api-evangelist/bolsai/refs/heads/main/apis.yml
 created: '2026-07-06'
-modified: '2026-07-06'
+modified: '2026-09-03'
 specificationVersion: '0.23'
 tags:
+- Finance
+- Financial Data
+- Market Data
+- Stocks/equities
+- Real Estate Funds
+- Dividends
+- Fundamentals
+- Macroeconomic Data
+- Brazil
+- Developer Tools
+- MCP
+- AI Agents
+tags_raw:
+- finance
+- financial-data
+- market-data
+- stocks-equities
+- real-estate-funds
+- dividends
+- fundamentals
+- macroeconomic-data
+- brazil
+- developer-tools
+- mcp
+- ai-agents
+apis:
+- name: Bolsai Financial Data API
+  description: REST/JSON API for Brazilian financial-market data — equities, FIIs, fundamentals, dividends, financial
+    statements, and macro series. Authenticated via X-API-Key header.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
   - Finance
   - Financial Data
   - Market Data
@@ -42,7 +78,7 @@ tags:
   - Developer Tools
   - MCP
   - AI Agents
-tags_raw:
+  tags_raw:
   - finance
   - financial-data
   - market-data
@@ -55,51 +91,67 @@ tags_raw:
   - developer-tools
   - mcp
   - ai-agents
-apis:
-  - name: Bolsai Financial Data API
-    description: >-
-      REST/JSON API for Brazilian financial-market data — equities, FIIs, fundamentals, dividends, financial statements,
-      and macro series. Authenticated via X-API-Key header.
-    humanURL: https://usebolsai.com/docs
-    baseURL: https://api.usebolsai.com/api/v1
-    tags:
-      - Finance
-      - Financial Data
-      - Market Data
-      - Stocks/equities
-      - Real Estate Funds
-      - Dividends
-      - Fundamentals
-      - Macroeconomic Data
-      - Brazil
-      - Developer Tools
-      - MCP
-      - AI Agents
-    tags_raw:
-      - finance
-      - financial-data
-      - market-data
-      - stocks-equities
-      - real-estate-funds
-      - dividends
-      - fundamentals
-      - macroeconomic-data
-      - brazil
-      - developer-tools
-      - mcp
-      - ai-agents
-    properties:
-      - type: OpenAPI
-        url: https://usebolsai.com/openapi.json
-      - type: Documentation
-        url: https://usebolsai.com/docs
-      - type: LLMSTxt
-        url: https://usebolsai.com/llms.txt
+  properties:
+  - type: OpenAPI
+    url: https://usebolsai.com/openapi.json
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: OpenAPI
+    url: openapi/bolsai-openapi.json
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: MCPServer
+    url: mcp/bolsai-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: Overlay
+    url: overlays/bolsai-openapi-overlay.yaml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+  - type: AgentSkill
+    url: skills/_index.yml
 maintainers:
-  - FN: Bolsai
-    url: https://usebolsai.com
+- FN: Bolsai
+  email: vinicius.lazzari@usebolsai.com
+  url: https://usebolsai.com
 generated:
   by: apis.io/add
   model: claude-opus-4-8
   confidence: 90
   at: '2026-07-06T15:21:36.821Z'
+common:
+- type: DomainSecurity
+  url: security/bolsai-domain-security.yml
+- type: Authentication
+  url: authentication/bolsai-authentication.yml
+- type: Packages
+  url: packages/bolsai-packages.yml
+- type: WellKnown
+  url: well-known/bolsai-well-known.yml
+- type: Blog
+  url: https://usebolsai.com/blog
+- type: Pricing
+  url: https://usebolsai.com/#pricing
+- type: Support
+  url: mailto:vinicius.lazzari@usebolsai.com
+x-enrichment:
+  date: '2026-09-03'
+  status: enriched
+  artifacts_added: 26
+  pass: local-v1

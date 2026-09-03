@@ -1,0 +1,19 @@
+generated: '2026-09-03'
+method: searched
+source: https://usebolsai.com/#playground + openapi/bolsai-openapi.json
+kind: playground
+note: >-
+  No separate sandbox environment or test-mode keys exist — there is a single
+  production environment. The provider ships an in-browser demo playground on
+  the landing page (#playground), backed by short-lived playground tokens from
+  GET /api/v1/keys/playground-token, and the free tier (200 req/day, no card)
+  serves as the de-facto trial environment.
+surfaces:
+  - name: Landing-page playground
+    url: https://usebolsai.com/#playground
+    auth: playground token (issued by get_playground_token_api_v1_keys_playground_token_get)
+  - name: Free tier
+    note: 200 requests/day against production data with a free API key (Google login, no card).
+test_modes: none
+test_credentials: none
+time_simulation: none

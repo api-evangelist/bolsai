@@ -1,0 +1,87 @@
+generated: '2026-09-03'
+method: derived
+source: openapi/bolsai-openapi.json + https://usebolsai.com/llms.txt
+note: >-
+  Entities keyed by B3 ticker (stocks/FIIs) and series_name (macro). The ticker
+  is the join key across the data plane; there are no synthetic id prefixes.
+entities:
+  - name: Company
+    key: ticker
+    schema: CompanyDetail / CompanySummary
+    fields_of_note: [ticker, name, sector]
+  - name: StockQuote
+    key: ticker
+    schema: StockQuote
+  - name: StockPrice
+    key: ticker + trade_date
+    schema: StockPriceItem / StockHistoryResponse
+    note: Daily OHLCV since 1986, adjusted for splits/dividends.
+  - name: Fundamentals
+    key: ticker (+ reference_date for history)
+    note: 27+ indicators — pl, pvp, lpa, vpa, p_sr, dividend_yield, roe, roic, margins, debt.
+  - name: FinancialStatement
+    key: ticker + reference_date
+    schema: FinancialsResponse / FinancialLineItem
+    note: DFP/ITR statements from CVM — income statement, balance sheet, cash flow.
+  - name: Dividend
+    key: ticker + ex_date
+    fields_of_note: [ex_date, payment_date, type]
+    note: Distinguishes JCP vs dividend.
+  - name: FII
+    key: ticker
+    note: Real estate fund — fundamentals, administrator, mandate, fund_type (Tijolo/Papel/Híbrido/Fundo de Fundos), segment, vacancy, delinquency.
+  - name: FIIDistribution
+    key: ticker + reference_date
+    note: Monthly distributions.
+  - name: FIITenant
+    key: ticker + sector
+    note: Tenant sector concentration (revenue % per sector).
+  - name: MacroSeries
+    key: series_name
+    schema: MacroSeriesResponse / MacroDataPoint
+    note: SELIC, IPCA, CDI, IGP-M, USD/BRL from BCB.
+  - name: CorporateEvent
+    key: ticker + date
+  - name: ApiKey
+    key: key_id
+    schema: KeyListItem / KeySecretResponse
+  - name: Usage
+    key: api_key
+    schema: UsageResponse
+relationships:
+  - from: Company
+    to: StockQuote
+    kind: has_many
+    via: ticker
+  - from: Company
+    to: StockPrice
+    kind: has_many
+    via: ticker
+  - from: Company
+    to: Fundamentals
+    kind: has_one
+    via: ticker
+  - from: Company
+    to: FinancialStatement
+    kind: has_many
+    via: ticker
+  - from: Company
+    to: Dividend
+    kind: has_many
+    via: ticker
+  - from: Company
+    to: CorporateEvent
+    kind: has_many
+    via: ticker
+  - from: FII
+    to: FIIDistribution
+    kind: has_many
+    via: ticker
+  - from: FII
+    to: FIITenant
+    kind: has_many
+    via: ticker
+  - from: FII
+    to: StockPrice
+    kind: has_many
+    via: ticker

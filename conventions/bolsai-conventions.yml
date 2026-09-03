@@ -1,0 +1,76 @@
+generated: '2026-09-03'
+method: searched
+source: https://usebolsai.com/docs + https://usebolsai.com/llms.txt + openapi/bolsai-openapi.json
+authentication:
+  style: api-key
+  header: X-API-Key
+  alternatives:
+    - "?api_key=... query parameter (documented in llms.txt)"
+    - "Authorization: Bearer ... (documented in llms.txt; also the OAuth token style for the hosted MCP endpoint)"
+  key_management: >-
+    Keys are created in the dashboard after Google login, or via POST /api/v1/keys.
+    Free plan allows 5 active keys, Pro allows 20. Keys can be rotated
+    (POST /api/v1/keys/{key_id}/rotate) and deleted (DELETE /api/v1/keys/{key_id}).
+  see: authentication/bolsai-authentication.yml
+versioning:
+  style: url-path-prefix
+  current: v1
+  prefix: /api/v1/
+  policy_published: false
+pagination:
+  style: limit-offset
+  params: [limit, offset]
+  default_limit: 50
+  response_fields: [count, total, offset, limit]
+  note: limit ranges vary by endpoint (1-500 on lists, up to 1-5000 on history endpoints).
+error_envelope:
+  shape: fastapi-detail
+  description: >-
+    FastAPI-style JSON envelope — validation errors return 422 with
+    {"detail": [{"loc": [...], "msg": "...", "type": "..."}]}. Not RFC 9457
+    application/problem+json.
+  see: errors/bolsai-problem-types.yml
+rate_limit_signaling:
+  headers: [X-RateLimit-Remaining]
+  exhaustion_status: 429
+  reset: daily at midnight UTC
+  see: rate-limits/bolsai-rate-limits.yml
+field_naming:
+  style: snake_case
+  note: >-
+    Fundamentals use Portuguese abbreviations (pl, pvp, lpa, vpa, p_sr,
+    dividend_yield, roe, roic). The provider states these names are permanent.
+dates:
+  trade_date: daily price rows
+  reference_date: financial reporting periods
+  ex_date: dividends
+idempotency:
+  supported: na
+  note: >-
+    The data plane is entirely GET (read-only), so idempotency keys do not apply.
+    No Idempotency-Key mechanism is documented for the small account-plane write
+    surface (keys, feedback, billing).
+request_id_tracing:
+  documented: false
+field_expansion:
+  documented: false
+reversibility:
+  data_plane: na
+  data_plane_note: >-
+    All market-data endpoints are read-only GETs — reversibility does not apply
+    to the data plane.
+  write_surfaces:
+    - action: API key creation
+      operation: create_key_api_v1_keys_post
+      reversal: delete_key_api_v1_keys__key_id__delete
+      window: null
+      grade: documented
+      docs: https://usebolsai.com/docs
+      note: Keys can also be rotated (rotate_key_api_v1_keys__key_id__rotate_post). Docs note a 400 when attempting to delete the sole active key. No time window applies.
+    - action: Pro subscription purchase
+      operation: create_checkout_api_v1_billing_checkout_post
+      reversal: customer_portal_api_v1_billing_portal_get (cancel via Stripe portal)
+      window: null
+      grade: documented
+      docs: https://usebolsai.com/llms.txt
+      note: 'Provider states "Cancel anytime via Stripe" — a reversal path with no stated refund window.'

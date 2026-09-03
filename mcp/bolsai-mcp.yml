@@ -1,0 +1,65 @@
+generated: '2026-09-03'
+method: searched
+source: https://usebolsai.com/mcp
+name: Bolsai MCP Server
+description: >-
+  Official Bolsai MCP server exposing Brazilian financial-market data (B3 stocks,
+  FIIs, fundamentals, dividends, CVM financial statements, BCB macro series) to
+  MCP clients. Available BOTH as a hosted remote endpoint with OAuth 2.0 (PKCE,
+  dynamic client registration) and as a local stdio package on PyPI.
+deployment:
+  mode: both
+  endpoint: https://usebolsai.com/api/mcp
+  install: uvx bolsai-mcp
+  package: https://pypi.org/project/bolsai-mcp/
+  auth: oauth
+  verified: probed
+evidence:
+  - url: https://usebolsai.com/api/mcp
+    probe: POST tools/list (anonymous)
+    http_status: 401
+    body: '{"error": "invalid_token", "error_description": "Authentication required"}'
+    note: Live endpoint, OAuth-gated — tool inputSchemas need authenticated introspection.
+  - url: https://usebolsai.com/.well-known/oauth-protected-resource
+    http_status: 200
+    note: RFC 9728 metadata naming https://usebolsai.com/api/mcp as the protected resource.
+  - url: https://usebolsai.com/.well-known/oauth-authorization-server
+    http_status: 200
+    note: RFC 8414 metadata — authorization_code + PKCE S256, dynamic registration at /api/v1/oauth/register.
+oauth:
+  authorization_endpoint: https://usebolsai.com/api/v1/oauth/authorize
+  token_endpoint: https://usebolsai.com/api/v1/oauth/token
+  registration_endpoint: https://usebolsai.com/api/v1/oauth/register
+  code_challenge_methods: [S256]
+  grant_types: [authorization_code]
+local_config:
+  command: uvx
+  args: [bolsai-mcp]
+  env:
+    BOLSAI_API_KEY: <your API key>
+tools:
+  # Names and descriptions from the provider's MCP guide (https://usebolsai.com/mcp).
+  # The live endpoint is OAuth-gated, so inputSchemas were not introspected.
+  - name: screen_stocks
+    description: Filter B3 stocks by fundamentalist metrics — DY, P/L, ROE and more.
+  - name: compare_stocks
+    description: Side-by-side comparison of up to 5 stocks with selectable metrics.
+  - name: get_fundamentals
+    description: 27+ indicators including P/L, P/VP, EV/EBITDA, ROE, margins, debt.
+  - name: get_dividends
+    description: Dividend and JCP history with yield, annual summary, payment dates.
+  - name: get_financial_statements
+    description: Income statement, balance sheet, and cash flow from CVM.
+  - name: get_fii_details
+    description: Real estate fund (FII) fundamentals and monthly distributions.
+  - name: get_price_history
+    description: Daily OHLCV prices since 1986, adjusted for splits/dividends.
+  - name: get_macro_indicator
+    description: SELIC, IPCA, CDI, USD/BRL from the Central Bank with historical series.
+  - name: get_stock_quote
+    description: Current price, daily change, 52-week range, YTD return.
+  - name: search_companies
+    description: Find B3-listed companies by name or sector.
+  - name: list_sectors
+    description: Available sectors with company counts.
+clients_documented: [Claude Desktop, Claude Code, ChatGPT, Cursor, Windsurf, VS Code Copilot]

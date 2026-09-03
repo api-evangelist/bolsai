@@ -1,0 +1,65 @@
+generated: '2026-09-03'
+method: probed
+source: live probes of usebolsai.com and api.usebolsai.com /.well-known/ paths
+note: >-
+  Both hosts serve live RFC 8414 OAuth authorization-server metadata and RFC 9728
+  protected-resource metadata (the protected resource is the hosted MCP endpoint
+  https://usebolsai.com/api/mcp). security.txt, openid-configuration, api-catalog,
+  ai-plugin.json, agent-card.json and agent.json all return the SPA's HTML 404 page
+  on both hosts — recorded as misses.
+hosts:
+  - host: usebolsai.com
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: well-known/bolsai-oauth-authorization-server.json
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        file: well-known/bolsai-oauth-protected-resource.json
+      - path: /.well-known/oauth-protected-resource/api/mcp
+        status: 200
+        file: well-known/bolsai-oauth-protected-resource.json
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null
+  - host: api.usebolsai.com
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: well-known/bolsai-oauth-authorization-server.json
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        file: well-known/bolsai-oauth-protected-resource.json
+      - path: /.well-known/security.txt
+        status: 404
+        file: null
+      - path: /.well-known/openid-configuration
+        status: 404
+        file: null
+      - path: /.well-known/api-catalog
+        status: 404
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 404
+        file: null
+      - path: /.well-known/agent.json
+        status: 404
+        file: null

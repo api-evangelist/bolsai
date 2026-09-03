@@ -1,0 +1,76 @@
+# bolsai
+
+> REST API for Brazilian financial market data. 27+ fundamentals indicators, 350+ stocks, 400+ FIIs (real estate funds), 40 years of price history. Data sourced from official institutions: B3 (stock exchange), CVM (securities regulator), BCB (central bank). Free tier: 200 requests/day. Pro tier: R$49/month, 10,000 requests/day.
+
+bolsai is built for developers, analysts, and AI agents working with Brazilian market data. The API is JSON-first, no authentication required for public read endpoints beyond an API key passed as `?api_key=...` or `Authorization: Bearer ...`. An MCP (Model Context Protocol) server is available for Claude, ChatGPT, and Cursor integration.
+
+Base URL: `https://api.usebolsai.com`
+API version prefix: `/api/v1/`
+
+## Docs
+
+- [Full API documentation](https://usebolsai.com/docs): All endpoints with request/response examples
+- [MCP integration guide](https://usebolsai.com/mcp): Use bolsai inside Claude Desktop, ChatGPT, or Cursor via Model Context Protocol
+- [OpenAPI schema](https://api.usebolsai.com/openapi.json): Machine-readable spec
+- [GPT Actions schema](https://usebolsai.com/gpt-actions-schema.json): Drop-in schema for ChatGPT custom GPTs
+
+## Endpoints
+
+- [Companies](https://usebolsai.com/docs#companies): List, search, and look up Brazilian listed companies by ticker, name, or sector
+- [Stocks](https://usebolsai.com/docs#stocks): End-of-day and historical quotes (updated daily 20:30 BRT after close), corporate events, dividends
+- [Fundamentals](https://usebolsai.com/docs#fundamentals): P/L, P/VP, ROE, ROIC, EV/EBITDA, dividend yield, LPA, VPA, margins (27+ indicators)
+- [Financials](https://usebolsai.com/docs#financials): DFP/ITR financial statements from CVM (DRE, balance sheet, cash flow)
+- [Dividends](https://usebolsai.com/docs#dividends): Full dividend history with ex-date, payment date, type (JCP vs dividend)
+- [Screener](https://usebolsai.com/docs#screener): Filter stocks by any combination of fundamentals
+- [FIIs](https://usebolsai.com/docs#fiis): Real estate funds — list, quotes, history, monthly distributions, administrator, mandate, asset composition, vacancy, delinquency, top properties
+- [FII Screener](https://usebolsai.com/docs#fiis-screener): Filter FIIs by P/VP, dividend yield, vacancy, fund_type (Tijolo/Papel/Híbrido/Fundo de Fundos), segment, mandate, administrator
+- [FII Tenants](https://usebolsai.com/docs#fiis-tenants): Tenant sector concentration (revenue % per sector)
+- [Macro](https://usebolsai.com/docs#macro): SELIC, IPCA, CDI, IGP-M time series from BCB
+
+## Key facts
+
+- **Coverage:** 350+ stocks on B3, 400+ FIIs, 40 years of OHLCV history
+- **Data sources:** B3 (prices, corporate events), CVM (financial statements, fund reports), BCB (macro)
+- **Update cadence:** Daily 20:30 BRT for prices and macro; weekly Saturdays for companies, financials, dividends, FIIs
+- **Accuracy:** 96% match with Fundamentus on fresh data (DFP 2025), 82% overall
+- **Methodology notes:** TTM net income uses CVM account 3.11 (total consolidated). EBIT is the clean definition (Gross Profit − SG&A), not CVM 3.05. Bank equity uses accounts 2.07/2.08. P/VP is used to validate shares-outstanding multipliers (units vs thousands vs millions in CVM reports).
+- **Field naming:** snake_case, with Portuguese abbreviations for fundamentals (`pl`, `pvp`, `lpa`, `vpa`, `p_sr`, `dividend_yield`, `roe`, `roic`). These names are permanent.
+- **Dates:** `trade_date` for prices, `reference_date` for financial reporting periods, `ex_date` for dividends.
+
+## Pricing
+
+- **Free:** 200 requests/day, current data, all public endpoints
+- **Pro (R$49/month):** 10,000 requests/day, full historical data, all endpoints, priority support. Cancel anytime via Stripe.
+
+## Blog
+
+The blog contains tutorials and reference material in Portuguese covering common use cases: building screeners, backtesting, dividend portfolios, Google Sheets/Excel integration, fundamentals calculation, and AI agent integration.
+
+- [Blog index](https://usebolsai.com/blog)
+- [Sitemap with all posts](https://usebolsai.com/sitemap.xml)
+- [MCP server setup guide](https://usebolsai.com/blog/mcp-server-b3-claude-ia-analise-acoes-2026): Installing and configuring bolsai-mcp for Claude Desktop, Claude Code, and Cursor
+- [AI agent for Brazilian stock analysis](https://usebolsai.com/blog/agente-ia-analise-acoes-brasileiras-claude-mcp-2026): Using Claude with MCP to analyze B3 stocks
+- [ChatGPT + Brazilian stock market via GPT Actions](https://usebolsai.com/blog/chatgpt-bolsa-brasileira-gpt-actions-oauth2-bolsai-2026): OAuth2 setup for custom GPTs
+- [bolsai vs brapi comparison](https://usebolsai.com/blog/bolsai-vs-brapi-comparacao-api-b3-2026): API feature and methodology comparison
+- [Alternatives to Fundamentus](https://usebolsai.com/blog/alternativa-ao-fundamentus-api-oficial-2026): API-first alternative to manual scraping
+- [How fundamentals are calculated](https://usebolsai.com/blog/como-sao-calculados-pl-pvp-roe-ev-ebitda-fundamentos-acoes): Methodology behind P/L, P/VP, ROE, EV/EBITDA
+- [Prompts for stock analysis with ChatGPT & Claude](https://usebolsai.com/blog/prompts-analise-acoes-chatgpt-claude-ia-2026): Ready-to-use prompts that feed the model real B3 data via MCP/GPT Actions
+- [Cursor + MCP for B3 data](https://usebolsai.com/blog/cursor-mcp-analise-acoes-b3-ia-2026): Configure bolsai-mcp inside Cursor
+- [AI agent to monitor your portfolio](https://usebolsai.com/blog/agente-ia-monitorar-carteira-acoes-python-2026): Scheduled Python agent using bolsai + an LLM
+- [FII analysis in Claude Desktop with MCP](https://usebolsai.com/blog/claude-desktop-mcp-analise-fiis-2026): Analyze real estate funds conversationally
+- [Perplexity + real B3 data](https://usebolsai.com/blog/perplexity-analise-acoes-b3-2026): Grounding Perplexity in bolsai data instead of stale training data
+- [Google Gemini + B3 data in Python](https://usebolsai.com/blog/gemini-dados-financeiros-b3-python-2026): Gemini function calling with the bolsai API
+- [n8n automation for stock alerts](https://usebolsai.com/blog/n8n-automacao-alertas-acoes-ia-b3-2026): No-code workflow — schedule, query bolsai, summarize with AI, notify
+- [bolsai vs Status Invest](https://usebolsai.com/blog/bolsai-vs-status-invest-api-dados-b3-2026): When you need an API vs a website
+- [bolsai vs Investidor10](https://usebolsai.com/blog/bolsai-vs-investidor10-dados-mercado-api-2026): Developer-first API vs browse-first platform
+- [Best B3 data APIs in 2026](https://usebolsai.com/blog/melhores-apis-dados-b3-2026-comparacao): Honest roundup of Brazilian market-data APIs
+- [Best MCP servers for Brazilian financial data (B3) in 2026](https://usebolsai.com/blog/melhores-mcp-servers-dados-financeiros-brasil-b3-2026): Neutral comparison of MCP servers serving B3 data (bolsai, brapi, Mais Retorno, Partnr, mcp-mercado, mcp-brasil) — tool count, fundamentals depth, CVM/BCB coverage, auth, free tier
+- [Migrate from yfinance to a B3 API](https://usebolsai.com/blog/migrar-yfinance-para-api-b3-acoes-brasileiras-2026): Why yfinance breaks on B3 stocks (.SA empty responses, ticker drift, missing CVM fundamentals) and how to migrate to an official API with before/after Python code
+- [Windsurf + B3 data via MCP](https://usebolsai.com/blog/windsurf-mcp-dados-acoes-b3-configurar-2026): Configure the bolsai-mcp server in Windsurf's mcp_config.json and query B3 quotes, fundamentals and screener from the Cascade agent
+- [VS Code Copilot + B3 data via MCP](https://usebolsai.com/blog/vscode-copilot-mcp-dados-acoes-b3-2026): Add bolsai-mcp to VS Code's mcp.json (servers key) and use GitHub Copilot in agent mode to read B3 fundamentals and quotes
+- [bolsai vs dadosdemercado](https://usebolsai.com/blog/bolsai-vs-dadosdemercado-api-dados-b3-2026): Honest comparison of two B3 data APIs — breadth of open data vs depth of calculated fundamentals and native MCP support
+- [Claude Code + B3 stock agent in the terminal](https://usebolsai.com/blog/claude-code-mcp-acoes-b3-terminal-agente-2026): Register bolsai-mcp with claude mcp add and run a terminal agent that screens, deep-dives fundamentals and compares B3 stocks
+
+## Optional
+
+- [Landing page](https://usebolsai.com/): Marketing overview, demo playground

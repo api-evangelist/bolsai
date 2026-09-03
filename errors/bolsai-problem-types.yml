@@ -1,0 +1,32 @@
+generated: '2026-09-03'
+method: derived
+source: openapi/bolsai-openapi.json + https://usebolsai.com/docs
+format: fastapi-detail
+rfc9457: false
+note: >-
+  The spec declares only 200 and 422 responses (FastAPI HTTPValidationError).
+  Additional statuses below come from the docs and live probes. No
+  application/problem+json envelope; errors use FastAPI's {"detail": ...} shape.
+problem_types:
+  - status: 422
+    title: Validation Error
+    detail_shape: '{"detail": [{"loc": [...], "msg": "...", "type": "..."}]}'
+    source: openapi (declared on 36 of 55 operations)
+    remediation: Fix the parameter named in loc — ticker format, date range, or enum value.
+  - status: 401
+    title: Authentication required
+    detail_shape: '{"error": "invalid_token", "error_description": "Authentication required"}'
+    source: probed — GET https://api.usebolsai.com/api/v1/health returned 401 without a key; the MCP endpoint returns the same envelope anonymously
+    remediation: Send your key in the X-API-Key header (or api_key query param / Bearer token).
+  - status: 429
+    title: Too Many Requests
+    source: docs — returned when the daily plan quota is exceeded; resets at midnight UTC
+    remediation: Wait for the daily reset, check X-RateLimit-Remaining, or upgrade the plan.
+  - status: 400
+    title: Bad Request (key management)
+    source: docs — account key limit reached, or attempting to delete the sole active key
+    remediation: Delete or rotate an existing key; keep at least one active key.
+  - status: 503
+    title: Service Unavailable
+    source: docs — health check degraded state
+    remediation: Retry later; check GET /health.

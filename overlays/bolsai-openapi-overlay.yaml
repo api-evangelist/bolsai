@@ -1,0 +1,43 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Bolsai OpenAPI
+  version: 1.0.0
+x-provenance:
+  generated: '2026-09-03'
+  method: generated
+  source: openapi/bolsai-openapi.json + https://usebolsai.com/llms.txt + https://usebolsai.com/docs
+extends: ./openapi/bolsai-openapi.json
+actions:
+  - target: $
+    description: >-
+      Add the servers block the published spec omits. Paths already carry the
+      /api/v1 prefix, so servers are host roots. llms.txt states the base URL is
+      https://api.usebolsai.com; the same spec is also served (and callable) at
+      https://usebolsai.com per the GPT Actions schema.
+    update:
+      servers:
+        - url: https://api.usebolsai.com
+          description: Primary API host (stated in llms.txt)
+        - url: https://usebolsai.com
+          description: Same backend on the site host (used by the GPT Actions schema)
+  - target: $.info
+    description: Add contact and terms context missing from the published spec.
+    update:
+      contact:
+        name: Bolsai
+        url: https://usebolsai.com
+        email: vinicius.lazzari@usebolsai.com
+  - target: $
+    description: Apply the ApiKeyHeader security scheme globally — the docs require X-API-Key on all /api/v1 data endpoints, but the spec declares no global security.
+    update:
+      security:
+        - ApiKeyHeader: []
+  - target: $.info.description
+    description: Append rate-limit and update-cadence facts from the docs.
+    update: >-
+      API de dados financeiros do Brasil — ações, FIIs, fundamentos, dividendos,
+      macro. Autenticação via header X-API-Key (ou ?api_key= / Bearer). Limites:
+      Free 200 req/dia, Pro 10.000 req/dia, reset à meia-noite UTC; a API retorna
+      429 ao exceder e o header X-RateLimit-Remaining indica o saldo. Preços e
+      macro atualizados diariamente às 20:30 BRT; demais dados semanalmente aos
+      sábados.

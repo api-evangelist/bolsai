@@ -1,0 +1,48 @@
+generated: '2026-09-03'
+method: probed
+source: live probes of usebolsai.com well-known endpoints + openapi/bolsai-openapi.json + https://usebolsai.com/docs
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: >-
+      Live RFC 8414 authorization-server metadata at
+      https://usebolsai.com/.well-known/oauth-authorization-server (200) —
+      authorization_code grant, PKCE S256, public clients
+      (token_endpoint_auth_methods_supported: none). Used by the hosted MCP
+      endpoint and the documented ChatGPT GPT-Actions OAuth integration.
+  - id: oauth2-dynamic-client-registration
+    conforms: true
+    evidence: >-
+      registration_endpoint https://usebolsai.com/api/v1/oauth/register declared
+      in the RFC 8414 metadata (RFC 7591).
+  - id: rfc9728-protected-resource-metadata
+    conforms: true
+    evidence: >-
+      https://usebolsai.com/.well-known/oauth-protected-resource (200) names
+      https://usebolsai.com/api/mcp as the protected resource with
+      bearer_methods_supported [header] — the MCP OAuth discovery flow.
+  - id: pkce
+    conforms: true
+    evidence: code_challenge_methods_supported [S256] in the AS metadata.
+  - id: pagination
+    conforms: true
+    evidence: >-
+      Uniform limit/offset pagination with count/total/offset/limit response
+      fields across list endpoints (docs + PaginatedResponse_CompanySummary_
+      schema in the OpenAPI).
+  - id: oidc
+    conforms: false
+    evidence: /.well-known/openid-configuration 404s on both hosts; end-user login is Google OAuth but no OIDC provider surface is published.
+  - id: rfc9457
+    conforms: false
+    evidence: 'Errors use FastAPI {detail} envelope, not application/problem+json.'
+  - id: idempotency
+    conforms: false
+    evidence: No Idempotency-Key mechanism documented; data plane is read-only GET.
+domain_standard: null
+domain_standard_note: >-
+  Brazilian retail market-data has no dominant machine-readable domain standard
+  to declare (this is not an Open Finance Brasil / FAPI-regulated surface — the
+  API serves public exchange/regulator data, not customer account data). No FIX,
+  ISO 20022 or Open Finance Brasil signature appears in the contract; nothing
+  is asserted.

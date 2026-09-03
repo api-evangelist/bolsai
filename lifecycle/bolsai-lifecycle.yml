@@ -1,0 +1,31 @@
+generated: '2026-09-03'
+method: derived
+source: openapi/bolsai-openapi.json + https://usebolsai.com/docs + https://usebolsai.com/llms.txt
+versioning:
+  scheme: url-path-prefix
+  current: v1
+  prefix: /api/v1/
+  policy_published: false
+deprecation:
+  policy_published: false
+  sunset_headers_documented: false
+  deprecated_operations: []
+  note: >-
+    No deprecation or sunset policy is published. The provider does state in
+    llms.txt that fundamentals field names "are permanent" — an informal
+    stability commitment on the response vocabulary.
+status_page:
+  url: null
+  note: >-
+    No status page. The API exposes GET /health (probed 200 on
+    api.usebolsai.com/health; docs document 200/503 semantics) but there is no
+    hosted status/uptime page — /status 404s.
+sla:
+  published: false
+data_freshness:
+  note: >-
+    Prices and macro update daily at 20:30 BRT after market close; companies,
+    financials, dividends and FIIs update weekly on Saturdays (stated in llms.txt).
+changelog:
+  published: false
+  note: /changelog 404s and no dated changelog was found on the docs site or blog.

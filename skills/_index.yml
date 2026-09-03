@@ -1,0 +1,16 @@
+generated: '2026-09-03'
+method: generated
+source: openapi/bolsai-openapi.json + https://usebolsai.com/docs + https://usebolsai.com/llms.txt
+skills:
+  - file: skills/bolsai-screen-stocks.md
+    name: bolsai-screen-stocks
+    summary: Screen B3 stocks by fundamentals and deep-dive the shortlist.
+  - file: skills/bolsai-analyze-fii.md
+    name: bolsai-analyze-fii
+    summary: Analyze a Brazilian real-estate fund (FII) — fundamentals, distributions, tenants.
+  - file: skills/bolsai-dividend-portfolio.md
+    name: bolsai-dividend-portfolio
+    summary: Build a dividend-income view for a set of B3 tickers.
+  - file: skills/bolsai-macro-context.md
+    name: bolsai-macro-context
+    summary: Pull SELIC/IPCA/CDI series to put an equity analysis in macro context.

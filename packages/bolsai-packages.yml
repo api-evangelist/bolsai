@@ -1,0 +1,25 @@
+generated: '2026-09-03'
+method: searched
+source: https://pypi.org/pypi/bolsai-mcp/json
+note: >-
+  One first-party package found: the bolsai-mcp MCP server on PyPI, published by the
+  Bolsai maintainer (project_urls point at usebolsai.com and
+  github.com/viniciuslazzari/bolsai-mcp). No packages found under "bolsai" on npm
+  (404), PyPI (404 for plain "bolsai"), or other registries — the REST API is
+  consumed directly over HTTP; the docs show plain requests/fetch examples rather
+  than a client SDK.
+packages:
+  - name: bolsai-mcp
+    registry: pypi
+    url: https://pypi.org/project/bolsai-mcp/
+    repository: https://github.com/viniciuslazzari/bolsai-mcp
+    language: Python
+    kind: mcp-server
+    official: true
+    version: 0.1.4
+    published: '2026-07-07'
+    install: uvx bolsai-mcp
+    note: >-
+      MCP server for the Bolsai Brazilian financial data API. First release 0.1.0
+      through 0.1.4 all published 2026-07; wraps the REST API for Claude, Cursor,
+      and other MCP clients. Configured with BOLSAI_API_KEY env var.
