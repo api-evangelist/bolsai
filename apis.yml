@@ -136,6 +136,8 @@ generated:
   confidence: 90
   at: '2026-07-06T15:21:36.821Z'
 common:
+- type: Website
+  url: https://www.usebolsai.com/
 - type: DomainSecurity
   url: security/bolsai-domain-security.yml
 - type: Authentication
