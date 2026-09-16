@@ -60,54 +60,24 @@ tags_raw:
 - mcp
 - ai-agents
 apis:
-- name: Bolsai Financial Data API
-  description: REST/JSON API for Brazilian financial-market data — equities, FIIs, fundamentals, dividends, financial
-    statements, and macro series. Authenticated via X-API-Key header.
+- aid: bolsai:bolsai-admin-api
+  name: Bolsai Admin API
+  description: The admin API from Bolsai — 2 operation(s) for admin.
   humanURL: https://usebolsai.com/docs
   baseURL: https://api.usebolsai.com/api/v1
   tags:
-  - Finance
-  - Financial Data
-  - Market Data
-  - Stocks/equities
-  - Real Estate Funds
-  - Dividends
-  - Fundamentals
-  - Macroeconomic Data
-  - Brazil
-  - Developer Tools
-  - MCP
-  - AI Agents
-  tags_raw:
-  - finance
-  - financial-data
-  - market-data
-  - stocks-equities
-  - real-estate-funds
-  - dividends
-  - fundamentals
-  - macroeconomic-data
-  - brazil
-  - developer-tools
-  - mcp
-  - ai-agents
+  - admin
   properties:
   - type: OpenAPI
-    url: https://usebolsai.com/openapi.json
+    url: openapi/bolsai-admin-api-openapi.yml
   - type: Documentation
     url: https://usebolsai.com/docs
   - type: LLMSTxt
     url: https://usebolsai.com/llms.txt
-  - type: OpenAPI
-    url: openapi/bolsai-openapi.json
   - type: LLMsTxt
     url: llms/bolsai-llms.txt
-  - type: MCPServer
-    url: mcp/bolsai-mcp.yml
   - type: ToolCrosswalk
     url: mcp/bolsai-tool-crosswalk.yml
-  - type: Overlay
-    url: overlays/bolsai-openapi-overlay.yaml
   - type: ErrorCatalog
     url: errors/bolsai-problem-types.yml
   - type: RateLimits
@@ -124,8 +94,482 @@ apis:
     url: lifecycle/bolsai-lifecycle.yml
   - type: Conformance
     url: conformance/bolsai-conformance.yml
-  - type: AgentSkill
-    url: skills/_index.yml
+- aid: bolsai:bolsai-api-keys-api
+  name: Bolsai API Keys API
+  description: Register and manage API keys (no auth required)
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - api-keys
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-api-keys-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-auth-api
+  name: Bolsai Auth API
+  description: The auth API from Bolsai — 5 operation(s) for auth.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - auth
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-auth-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-billing-api
+  name: Bolsai Billing API
+  description: The billing API from Bolsai — 3 operation(s) for billing.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - billing
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-billing-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-companies-api
+  name: Bolsai Companies API
+  description: The Companies API from Bolsai — 5 operation(s) for companies.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - Companies
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-companies-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-dividends-api
+  name: Bolsai Dividends API
+  description: The Dividends API from Bolsai — 2 operation(s) for dividends.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - Dividends
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-dividends-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-feedback-api
+  name: Bolsai Feedback API
+  description: The feedback API from Bolsai — 6 operation(s) for feedback.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - feedback
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-feedback-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-fiis-api
+  name: Bolsai Fiis API
+  description: The Fiis API from Bolsai — 10 operation(s) for fiis.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - Fiis
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-fiis-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-financials-api
+  name: Bolsai Financials API
+  description: The Financials API from Bolsai — 2 operation(s) for financials.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - Financials
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-financials-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-fundamentals-api
+  name: Bolsai Fundamentals API
+  description: The Fundamentals API from Bolsai — 4 operation(s) for fundamentals.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - Fundamentals
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-fundamentals-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-health-api
+  name: Bolsai Health API
+  description: The health API from Bolsai — 1 operation(s) for health.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - health
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-health-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-macro-api
+  name: Bolsai Macro API
+  description: The Macro API from Bolsai — 5 operation(s) for macro.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - Macro
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-macro-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-oauth-api
+  name: Bolsai OAUTH API
+  description: The oauth API from Bolsai — 7 operation(s) for oauth.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - oauth
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-oauth-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-screener-api
+  name: Bolsai Screener API
+  description: Screen stocks by fundamental metrics
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - screener
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-screener-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-stocks-api
+  name: Bolsai Stocks API
+  description: The Stocks API from Bolsai — 13 operation(s) for stocks.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - Stocks
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-stocks-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
 maintainers:
 - FN: Bolsai
   email: vinicius.lazzari@usebolsai.com
@@ -136,6 +580,12 @@ generated:
   confidence: 90
   at: '2026-07-06T15:21:36.821Z'
 common:
+- type: MCPServer
+  url: mcp/bolsai-mcp.yml
+- type: Overlay
+  url: overlays/bolsai-openapi-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
 - type: Website
   url: https://www.usebolsai.com/
 - type: DomainSecurity
