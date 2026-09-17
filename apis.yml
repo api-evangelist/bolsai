@@ -468,40 +468,6 @@ apis:
     url: lifecycle/bolsai-lifecycle.yml
   - type: Conformance
     url: conformance/bolsai-conformance.yml
-- aid: bolsai:bolsai-oauth-api
-  name: Bolsai OAUTH API
-  description: The oauth API from Bolsai — 7 operation(s) for oauth.
-  humanURL: https://usebolsai.com/docs
-  baseURL: https://api.usebolsai.com/api/v1
-  tags:
-  - oauth
-  properties:
-  - type: OpenAPI
-    url: openapi/bolsai-oauth-api-openapi.yml
-  - type: Documentation
-    url: https://usebolsai.com/docs
-  - type: LLMSTxt
-    url: https://usebolsai.com/llms.txt
-  - type: LLMsTxt
-    url: llms/bolsai-llms.txt
-  - type: ToolCrosswalk
-    url: mcp/bolsai-tool-crosswalk.yml
-  - type: ErrorCatalog
-    url: errors/bolsai-problem-types.yml
-  - type: RateLimits
-    url: rate-limits/bolsai-rate-limits.yml
-  - type: Plans
-    url: plans/bolsai-plans-pricing.yml
-  - type: Sandbox
-    url: sandbox/bolsai-sandbox.yml
-  - type: DataModel
-    url: data-model/bolsai-data-model.yml
-  - type: Conventions
-    url: conventions/bolsai-conventions.yml
-  - type: Lifecycle
-    url: lifecycle/bolsai-lifecycle.yml
-  - type: Conformance
-    url: conformance/bolsai-conformance.yml
 - aid: bolsai:bolsai-screener-api
   name: Bolsai Screener API
   description: Screen stocks by fundamental metrics
@@ -546,6 +512,40 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/bolsai-stocks-api-openapi.yml
+  - type: Documentation
+    url: https://usebolsai.com/docs
+  - type: LLMSTxt
+    url: https://usebolsai.com/llms.txt
+  - type: LLMsTxt
+    url: llms/bolsai-llms.txt
+  - type: ToolCrosswalk
+    url: mcp/bolsai-tool-crosswalk.yml
+  - type: ErrorCatalog
+    url: errors/bolsai-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/bolsai-rate-limits.yml
+  - type: Plans
+    url: plans/bolsai-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/bolsai-sandbox.yml
+  - type: DataModel
+    url: data-model/bolsai-data-model.yml
+  - type: Conventions
+    url: conventions/bolsai-conventions.yml
+  - type: Lifecycle
+    url: lifecycle/bolsai-lifecycle.yml
+  - type: Conformance
+    url: conformance/bolsai-conformance.yml
+- aid: bolsai:bolsai-oauth-api
+  name: Bolsai OAUTH API
+  description: The oauth API from Bolsai — 7 operation(s) for oauth.
+  humanURL: https://usebolsai.com/docs
+  baseURL: https://api.usebolsai.com/api/v1
+  tags:
+  - oauth
+  properties:
+  - type: OpenAPI
+    url: openapi/bolsai-oauth-api-openapi.yml
   - type: Documentation
     url: https://usebolsai.com/docs
   - type: LLMSTxt
