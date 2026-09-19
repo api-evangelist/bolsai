@@ -66,6 +66,8 @@ apis:
   humanURL: https://usebolsai.com/docs
   baseURL: https://api.usebolsai.com/api/v1
   tags:
+  - Admin
+  tags_raw:
   - admin
   properties:
   - type: OpenAPI
@@ -100,6 +102,8 @@ apis:
   humanURL: https://usebolsai.com/docs
   baseURL: https://api.usebolsai.com/api/v1
   tags:
+  - APIKeys
+  tags_raw:
   - api-keys
   properties:
   - type: OpenAPI
@@ -134,6 +138,8 @@ apis:
   humanURL: https://usebolsai.com/docs
   baseURL: https://api.usebolsai.com/api/v1
   tags:
+  - Authentication
+  tags_raw:
   - auth
   properties:
   - type: OpenAPI
@@ -168,6 +174,8 @@ apis:
   humanURL: https://usebolsai.com/docs
   baseURL: https://api.usebolsai.com/api/v1
   tags:
+  - Billing
+  tags_raw:
   - billing
   properties:
   - type: OpenAPI
@@ -270,6 +278,8 @@ apis:
   humanURL: https://usebolsai.com/docs
   baseURL: https://api.usebolsai.com/api/v1
   tags:
+  - Feedback
+  tags_raw:
   - feedback
   properties:
   - type: OpenAPI
@@ -338,6 +348,8 @@ apis:
   humanURL: https://usebolsai.com/docs
   baseURL: https://api.usebolsai.com/api/v1
   tags:
+  - Financial
+  tags_raw:
   - Financials
   properties:
   - type: OpenAPI
@@ -406,6 +418,8 @@ apis:
   humanURL: https://usebolsai.com/docs
   baseURL: https://api.usebolsai.com/api/v1
   tags:
+  - Health
+  tags_raw:
   - health
   properties:
   - type: OpenAPI
@@ -474,6 +488,8 @@ apis:
   humanURL: https://usebolsai.com/docs
   baseURL: https://api.usebolsai.com/api/v1
   tags:
+  - Screener
+  tags_raw:
   - screener
   properties:
   - type: OpenAPI
@@ -542,6 +558,8 @@ apis:
   humanURL: https://usebolsai.com/docs
   baseURL: https://api.usebolsai.com/api/v1
   tags:
+  - Authentication
+  tags_raw:
   - oauth
   properties:
   - type: OpenAPI
