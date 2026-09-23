@@ -1,0 +1,283 @@
+openapi: 3.2.0
+info:
+  title: bolsai API Keys API
+  description: 'API de dados financeiros do Brasil — ações, FIIs, fundamentos, dividendos, macro.
+
+
+    **Autenticação:** Inclua sua API key no header `X-API-Key`.
+
+
+    **Criar conta:** Faça login com Google em https://usebolsai.com
+
+
+    **Planos:** Grátis (200 req/dia) · Pro R$49/mês (10K req/dia, todos endpoints)'
+  version: 1.0.0
+tags:
+- name: API Keys
+  description: Register and manage API keys (no auth required)
+paths:
+  /api/v1/keys:
+    get:
+      tags:
+      - API Keys
+      summary: List Keys
+      description: List the current user's active API keys.
+      operationId: list_keys_api_v1_keys_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/KeyListItem'
+                type: array
+                title: Response List Keys Api V1 Keys Get
+      security:
+      - ApiKeyHeader: []
+    post:
+      tags:
+      - API Keys
+      summary: Create Key
+      description: Create a new API key for the current user.
+      operationId: create_key_api_v1_keys_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateKeyRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeySecretResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/keys/{key_id}/rotate:
+    post:
+      tags:
+      - API Keys
+      summary: Rotate Key
+      description: Generate a new secret for an existing key. The old secret is invalidated immediately.
+      operationId: rotate_key_api_v1_keys__key_id__rotate_post
+      parameters:
+      - name: key_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Key Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeySecretResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/keys/{key_id}:
+    delete:
+      tags:
+      - API Keys
+      summary: Delete Key
+      description: Soft-delete a key. Blocked if it's the user's last active key.
+      operationId: delete_key_api_v1_keys__key_id__delete
+      parameters:
+      - name: key_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Key Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/keys/playground-token:
+    get:
+      tags:
+      - API Keys
+      summary: Get Playground Token
+      description: Generate a short-lived token for the website playground.
+      operationId: get_playground_token_api_v1_keys_playground_token_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/keys/usage:
+    get:
+      tags:
+      - API Keys
+      summary: Get Usage
+      description: Check current API key usage and limits.
+      operationId: get_usage_api_v1_keys_usage_get
+      parameters:
+      - name: api_key
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Api Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UsageResponse:
+      properties:
+        tier:
+          type: string
+          title: Tier
+        used_today:
+          type: integer
+          title: Used Today
+        daily_limit:
+          type: integer
+          title: Daily Limit
+        remaining:
+          type: integer
+          title: Remaining
+      type: object
+      required:
+      - tier
+      - used_today
+      - daily_limit
+      - remaining
+      title: UsageResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CreateKeyRequest:
+      properties:
+        label:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Label
+      type: object
+      required:
+      - label
+      title: CreateKeyRequest
+    KeyListItem:
+      properties:
+        id:
+          type: integer
+          title: Id
+        label:
+          type: string
+          title: Label
+        key_masked:
+          type: string
+          title: Key Masked
+        is_active:
+          type: boolean
+          title: Is Active
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        last_used_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Used At
+      type: object
+      required:
+      - id
+      - label
+      - key_masked
+      - is_active
+      - created_at
+      - last_used_at
+      title: KeyListItem
+    KeySecretResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+        label:
+          type: string
+          title: Label
+        key:
+          type: string
+          title: Key
+      type: object
+      required:
+      - id
+      - label
+      - key
+      title: KeySecretResponse
+      description: Returned only when creating or rotating — full secret shown once.
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Get your key at POST /api/v1/keys/register

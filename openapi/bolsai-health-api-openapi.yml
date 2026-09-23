@@ -1,0 +1,36 @@
+openapi: 3.2.0
+info:
+  title: bolsai Health API
+  description: 'API de dados financeiros do Brasil — ações, FIIs, fundamentos, dividendos, macro.
+
+
+    **Autenticação:** Inclua sua API key no header `X-API-Key`.
+
+
+    **Criar conta:** Faça login com Google em https://usebolsai.com
+
+
+    **Planos:** Grátis (200 req/dia) · Pro R$49/mês (10K req/dia, todos endpoints)'
+  version: 1.0.0
+tags:
+- name: Health
+paths:
+  /health:
+    get:
+      tags:
+      - Health
+      summary: Health Check
+      operationId: health_check_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Get your key at POST /api/v1/keys/register

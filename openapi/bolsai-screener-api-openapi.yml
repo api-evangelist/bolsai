@@ -1,0 +1,146 @@
+openapi: 3.2.0
+info:
+  title: bolsai Screener API
+  description: 'API de dados financeiros do Brasil — ações, FIIs, fundamentos, dividendos, macro.
+
+
+    **Autenticação:** Inclua sua API key no header `X-API-Key`.
+
+
+    **Criar conta:** Faça login com Google em https://usebolsai.com
+
+
+    **Planos:** Grátis (200 req/dia) · Pro R$49/mês (10K req/dia, todos endpoints)'
+  version: 1.0.0
+tags:
+- name: Screener
+  description: Screen stocks by fundamental metrics
+paths:
+  /api/v1/screener/:
+    get:
+      tags:
+      - Screener
+      summary: Screen Stocks
+      description: 'Screen stocks by fundamental metrics.
+
+
+        Scans all ~264 traded companies. Use {metric}_gt and {metric}_lt query
+
+        params to filter (e.g. ?pl_lt=15&roe_gt=10÷nd_yield_gt=5).'
+      operationId: screen_stocks_api_v1_screener__get
+      parameters:
+      - name: sector
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by sector
+          title: Sector
+        description: Filter by sector
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Metric to sort by
+          default: market_cap
+          title: Sort
+        description: Metric to sort by
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Sort order: asc or desc'
+          default: desc
+          title: Order
+        description: 'Sort order: asc or desc'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 500
+          minimum: 1
+          description: Results per page
+          default: 50
+          title: Limit
+        description: Results per page
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Pagination offset
+          default: 0
+          title: Offset
+        description: Pagination offset
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Get your key at POST /api/v1/keys/register

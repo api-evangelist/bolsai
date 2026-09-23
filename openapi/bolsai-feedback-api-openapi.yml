@@ -1,0 +1,299 @@
+openapi: 3.2.0
+info:
+  title: bolsai Feedback API
+  description: 'API de dados financeiros do Brasil — ações, FIIs, fundamentos, dividendos, macro.
+
+
+    **Autenticação:** Inclua sua API key no header `X-API-Key`.
+
+
+    **Criar conta:** Faça login com Google em https://usebolsai.com
+
+
+    **Planos:** Grátis (200 req/dia) · Pro R$49/mês (10K req/dia, todos endpoints)'
+  version: 1.0.0
+tags:
+- name: Feedback
+paths:
+  /api/v1/feedback/:
+    post:
+      tags:
+      - Feedback
+      summary: Submit Feedback
+      description: Submit feedback, optionally with image attachments. Requires logged-in session.
+      operationId: submit_feedback_api_v1_feedback__post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_submit_feedback_api_v1_feedback__post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/feedback/mine:
+    get:
+      tags:
+      - Feedback
+      summary: My Feedback
+      description: The logged-in user's own feedback threads (root + replies + image ids), paginated.
+      operationId: my_feedback_api_v1_feedback_mine_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 10
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/feedback/{feedback_id}/reply:
+    post:
+      tags:
+      - Feedback
+      summary: Reply To Own Feedback
+      description: User replies within their own feedback thread.
+      operationId: reply_to_own_feedback_api_v1_feedback__feedback_id__reply_post
+      parameters:
+      - name: feedback_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Feedback Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplyRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/feedback/admin/{feedback_id}/reply:
+    post:
+      tags:
+      - Feedback
+      summary: Admin Reply
+      description: Admin replies to a feedback thread. Posted from the admin page form.
+      operationId: admin_reply_api_v1_feedback_admin__feedback_id__reply_post
+      parameters:
+      - name: feedback_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Feedback Id
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/feedback/image/{image_id}:
+    get:
+      tags:
+      - Feedback
+      summary: Feedback Image
+      description: Serve an attached image. Visible to the admin or the feedback's owner.
+      operationId: feedback_image_api_v1_feedback_image__image_id__get
+      parameters:
+      - name: image_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Image Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/feedback/admin:
+    get:
+      tags:
+      - Feedback
+      summary: Admin Feedback
+      description: Admin page to view all feedback threads. Protected by admin email check.
+      operationId: admin_feedback_api_v1_feedback_admin_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Body_submit_feedback_api_v1_feedback__post:
+      properties:
+        category:
+          type: string
+          title: Category
+          default: geral
+        message:
+          type: string
+          title: Message
+        files:
+          items:
+            type: string
+            contentMediaType: application/octet-stream
+          type: array
+          title: Files
+          default: []
+      type: object
+      required:
+      - message
+      title: Body_submit_feedback_api_v1_feedback__post
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ReplyRequest:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: ReplyRequest
+    Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Get your key at POST /api/v1/keys/register

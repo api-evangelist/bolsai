@@ -1,0 +1,83 @@
+openapi: 3.2.0
+info:
+  title: bolsai Billing API
+  description: 'API de dados financeiros do Brasil — ações, FIIs, fundamentos, dividendos, macro.
+
+
+    **Autenticação:** Inclua sua API key no header `X-API-Key`.
+
+
+    **Criar conta:** Faça login com Google em https://usebolsai.com
+
+
+    **Planos:** Grátis (200 req/dia) · Pro R$49/mês (10K req/dia, todos endpoints)'
+  version: 1.0.0
+tags:
+- name: Billing
+paths:
+  /api/v1/billing/checkout:
+    get:
+      tags:
+      - Billing
+      summary: Create Checkout
+      description: Create a Stripe Checkout session for Pro upgrade.
+      operationId: create_checkout_api_v1_billing_checkout_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeader: []
+    post:
+      tags:
+      - Billing
+      summary: Create Checkout
+      description: Create a Stripe Checkout session for Pro upgrade.
+      operationId: create_checkout_api_v1_billing_checkout_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeader: []
+  /api/v1/billing/portal:
+    get:
+      tags:
+      - Billing
+      summary: Customer Portal
+      description: Redirect to Stripe Customer Portal to manage subscription.
+      operationId: customer_portal_api_v1_billing_portal_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeader: []
+  /api/v1/billing/webhook:
+    post:
+      tags:
+      - Billing
+      summary: Stripe Webhook
+      description: Handle Stripe webhook events.
+      operationId: stripe_webhook_api_v1_billing_webhook_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeader: []
+components:
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Get your key at POST /api/v1/keys/register

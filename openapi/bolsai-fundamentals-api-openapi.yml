@@ -1,0 +1,226 @@
+openapi: 3.2.0
+info:
+  title: Bolsai Fundamentals API
+  version: 1.0.0
+  description: 'Operations tagged Fundamentals across 2 of this provider''s published API definitions: bolsai-gpt-actions-schema.json, bolsai-openapi-original.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://usebolsai.com/api/v1
+tags:
+- name: Fundamentals
+paths:
+  /fundamentals/{ticker}:
+    get:
+      operationId: getFundamentals
+      summary: Indicadores fundamentalistas atuais
+      description: '27+ indicadores: P/L (pl), P/VP (pvp), EV/EBITDA (ev_ebitda), ROE (roe), ROA (roa), ROIC (roic), margem líquida (net_margin), margem bruta (gross_margin), dividend yield (dividend_yield), dívida/patrimônio (debt_equity), LPA (lpa), VPA (vpa).'
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z]{4}\d{0,2}$
+      - name: reference_date
+        in: query
+        schema:
+          type: string
+          format: date
+        description: Data de referência específica (opcional)
+      responses:
+        '200':
+          description: Indicadores fundamentalistas
+      tags:
+      - Fundamentals
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /fundamentals/{ticker}/history:
+    get:
+      operationId: getFundamentalsHistory
+      summary: Histórico trimestral de fundamentos
+      description: Fundamentos trimestrais desde 2010. Cada período contém todos os indicadores.
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z]{4}\d{0,2}$
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 40
+          minimum: 1
+          maximum: 80
+        description: Número de trimestres
+      responses:
+        '200':
+          description: Array de fundamentos trimestrais
+      tags:
+      - Fundamentals
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /api/v1/fundamentals/{ticker}:
+    get:
+      tags:
+      - Fundamentals
+      summary: Get Fundamentals
+      description: 'Get fundamental indicators by ticker.
+
+
+        Uses the most recent DFP or ITR data available.
+
+        Calculates P/L, EV/EBITDA, ROE, net margin, debt/equity.'
+      operationId: get_fundamentals_api_v1_fundamentals__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z][A-Za-z0-9]{3}\d{0,2}$
+          description: Ticker
+          title: Ticker
+        description: Ticker
+      - name: reference_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          description: Financial statement date
+          title: Reference Date
+        description: Financial statement date
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/fundamentals/{ticker}/history:
+    get:
+      tags:
+      - Fundamentals
+      summary: Get Fundamentals History
+      description: Get historical fundamentals (one per quarter, most recent first).
+      operationId: get_fundamentals_history_api_v1_fundamentals__ticker__history_get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z][A-Za-z0-9]{3}\d{0,2}$
+          description: Ticker
+          title: Ticker
+        description: Ticker
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 80
+          minimum: 1
+          description: Number of quarterly periods
+          default: 40
+          title: Limit
+        description: Number of quarterly periods
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://usebolsai.com/api/v1/oauth/authorize
+          tokenUrl: https://usebolsai.com/api/v1/oauth/token
+          scopes: {}
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Get your key at POST /api/v1/keys/register
+x-refined-from:
+- bolsai-gpt-actions-schema.json
+- bolsai-openapi-original.json

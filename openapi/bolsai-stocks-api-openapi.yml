@@ -1,0 +1,706 @@
+openapi: 3.2.0
+info:
+  title: Bolsai Stocks API
+  version: 1.0.0
+  description: 'Operations tagged Stocks across 2 of this provider''s published API definitions: bolsai-gpt-actions-schema.json, bolsai-openapi-original.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://usebolsai.com/api/v1
+tags:
+- name: Stocks
+paths:
+  /stocks/:
+    get:
+      operationId: listTickers
+      summary: Lista todos os tickers disponíveis
+      description: Lista tickers de ações (02), FIIs (12) ou BDRs (14) com paginação.
+      parameters:
+      - name: bdi_code
+        in: query
+        schema:
+          type: string
+          default: '02'
+          enum:
+          - '02'
+          - '12'
+          - '14'
+        description: 02=ações, 12=FIIs, 14=BDRs
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 500
+          minimum: 1
+          maximum: 5000
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      responses:
+        '200':
+          description: Lista de tickers
+      tags:
+      - Stocks
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /stocks/{ticker}/quote:
+    get:
+      operationId: getStockQuote
+      summary: Cotação atual de uma ação
+      description: 'Retorna o preço mais recente: open, high, low, close, volume.'
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z]{4}\d{0,2}$
+        description: 'Ticker da ação (ex: PETR4, VALE3)'
+      responses:
+        '200':
+          description: Cotação atual
+      tags:
+      - Stocks
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /stocks/{ticker}/history:
+    get:
+      operationId: getStockHistory
+      summary: Histórico de preços diários
+      description: Preços OHLCV diários ajustados por splits e dividendos. Dados desde 1986.
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z]{4}\d{0,2}$
+      - name: start
+        in: query
+        schema:
+          type: string
+          format: date
+        description: Data início (YYYY-MM-DD)
+      - name: end
+        in: query
+        schema:
+          type: string
+          format: date
+        description: Data fim (YYYY-MM-DD)
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 252
+          minimum: 1
+          maximum: 5000
+        description: Máximo de registros (252 = 1 ano)
+      responses:
+        '200':
+          description: Array de preços diários
+      tags:
+      - Stocks
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /stocks/{ticker}/stats:
+    get:
+      operationId: getStockStats
+      summary: Estatísticas de preço
+      description: Máxima/mínima 52 semanas, retorno YTD, variação diária, volume médio.
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z]{4}\d{0,2}$
+      responses:
+        '200':
+          description: Estatísticas de preço
+      tags:
+      - Stocks
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /stocks/{ticker}/corporate-events:
+    get:
+      operationId: getStockCorporateEvents
+      summary: Splits e desdobramentos
+      description: Detecta splits e grupamentos de uma ação.
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z]{4}\d{0,2}$
+      responses:
+        '200':
+          description: Lista de eventos corporativos
+      tags:
+      - Stocks
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /stocks/{ticker}/ticker-history:
+    get:
+      operationId: getTickerHistory
+      summary: Histórico de renomeações do ticker
+      description: 'Mostra todas as mudanças de ticker da empresa (ex: VIIA3 → BHIA3).'
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z]{4}\d{0,2}$
+      responses:
+        '200':
+          description: Cadeia de renomeações
+      tags:
+      - Stocks
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /api/v1/stocks/:
+    get:
+      tags:
+      - Stocks
+      summary: List Tickers
+      operationId: list_tickers_api_v1_stocks__get
+      parameters:
+      - name: bdi_code
+        in: query
+        required: false
+        schema:
+          type: string
+          description: BDI code (02=stocks, 12=FIIs, 14=BDRs)
+          default: '02'
+          title: Bdi Code
+        description: BDI code (02=stocks, 12=FIIs, 14=BDRs)
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 5000
+          minimum: 1
+          default: 500
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TickersListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/stocks/corporate-events:
+    get:
+      tags:
+      - Stocks
+      summary: All Corporate Events
+      description: List all detected splits and reverse splits across all tickers.
+      operationId: all_corporate_events_api_v1_stocks_corporate_events_get
+      parameters:
+      - name: year
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            maximum: 2030
+            minimum: 2000
+          - type: 'null'
+          description: Filter by year
+          title: Year
+        description: Filter by year
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          default: 100
+          title: Limit
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/stocks/{ticker}/history:
+    get:
+      tags:
+      - Stocks
+      summary: Stock History
+      operationId: stock_history_api_v1_stocks__ticker__history_get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z][A-Za-z0-9]{3}\d{0,2}$
+          description: Ticker
+          title: Ticker
+        description: Ticker
+      - name: start
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Start
+      - name: end
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: End
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 5000
+          minimum: 1
+          default: 252
+          title: Limit
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockHistoryResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/stocks/{ticker}/quote:
+    get:
+      tags:
+      - Stocks
+      summary: Stock Quote
+      operationId: stock_quote_api_v1_stocks__ticker__quote_get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z][A-Za-z0-9]{3}\d{0,2}$
+          description: Ticker
+          title: Ticker
+        description: Ticker
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockQuote'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/stocks/{ticker}/stats:
+    get:
+      tags:
+      - Stocks
+      summary: Stock Stats
+      description: 'Price statistics: 52-week high/low, YTD return, daily change, avg volume.'
+      operationId: stock_stats_api_v1_stocks__ticker__stats_get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z][A-Za-z0-9]{3}\d{0,2}$
+          description: Ticker
+          title: Ticker
+        description: Ticker
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/stocks/{ticker}/corporate-events:
+    get:
+      tags:
+      - Stocks
+      summary: Stock Corporate Events
+      description: Detect splits and reverse splits from price history.
+      operationId: stock_corporate_events_api_v1_stocks__ticker__corporate_events_get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z][A-Za-z0-9]{3}\d{0,2}$
+          description: Ticker
+          title: Ticker
+        description: Ticker
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/stocks/{ticker}/ticker-history:
+    get:
+      tags:
+      - Stocks
+      summary: Ticker History
+      description: Show all historical tickers for a company (rename chain).
+      operationId: ticker_history_api_v1_stocks__ticker__ticker_history_get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z][A-Za-z0-9]{3}\d{0,2}$
+          description: Ticker
+          title: Ticker
+        description: Ticker
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+components:
+  schemas:
+    StockQuote:
+      properties:
+        ticker:
+          type: string
+          title: Ticker
+        trade_date:
+          type: string
+          format: date
+          title: Trade Date
+        open:
+          type: number
+          title: Open
+        high:
+          type: number
+          title: High
+        low:
+          type: number
+          title: Low
+        close:
+          type: number
+          title: Close
+        volume:
+          type: integer
+          title: Volume
+        traded_amount:
+          type: number
+          title: Traded Amount
+        num_trades:
+          type: integer
+          title: Num Trades
+      type: object
+      required:
+      - ticker
+      - trade_date
+      - open
+      - high
+      - low
+      - close
+      - volume
+      - traded_amount
+      - num_trades
+      title: StockQuote
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    StockPriceItem:
+      properties:
+        trade_date:
+          type: string
+          format: date
+          title: Trade Date
+        open:
+          type: number
+          title: Open
+        high:
+          type: number
+          title: High
+        low:
+          type: number
+          title: Low
+        close:
+          type: number
+          title: Close
+        adjusted_open:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Adjusted Open
+        adjusted_high:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Adjusted High
+        adjusted_low:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Adjusted Low
+        adjusted_close:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Adjusted Close
+        volume:
+          type: integer
+          title: Volume
+        adjusted_volume:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Adjusted Volume
+        traded_amount:
+          type: number
+          title: Traded Amount
+        num_trades:
+          type: integer
+          title: Num Trades
+      type: object
+      required:
+      - trade_date
+      - open
+      - high
+      - low
+      - close
+      - volume
+      - traded_amount
+      - num_trades
+      title: StockPriceItem
+    StockHistoryResponse:
+      properties:
+        ticker:
+          type: string
+          title: Ticker
+        count:
+          type: integer
+          title: Count
+        prices:
+          items:
+            $ref: '#/components/schemas/StockPriceItem'
+          type: array
+          title: Prices
+      type: object
+      required:
+      - ticker
+      - count
+      - prices
+      title: StockHistoryResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TickersListResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        count:
+          type: integer
+          title: Count
+        tickers:
+          items:
+            type: string
+          type: array
+          title: Tickers
+      type: object
+      required:
+      - total
+      - count
+      - tickers
+      title: TickersListResponse
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://usebolsai.com/api/v1/oauth/authorize
+          tokenUrl: https://usebolsai.com/api/v1/oauth/token
+          scopes: {}
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Get your key at POST /api/v1/keys/register
+x-refined-from:
+- bolsai-gpt-actions-schema.json
+- bolsai-openapi-original.json

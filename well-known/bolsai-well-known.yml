@@ -1,65 +1,90 @@
-generated: '2026-09-03'
+generated: '2026-09-19'
 method: probed
 source: live probes of usebolsai.com and api.usebolsai.com /.well-known/ paths
-note: >-
-  Both hosts serve live RFC 8414 OAuth authorization-server metadata and RFC 9728
-  protected-resource metadata (the protected resource is the hosted MCP endpoint
-  https://usebolsai.com/api/mcp). security.txt, openid-configuration, api-catalog,
-  ai-plugin.json, agent-card.json and agent.json all return the SPA's HTML 404 page
-  on both hosts — recorded as misses.
+note: 'Both hosts serve live RFC 8414 OAuth authorization-server metadata and RFC 9728 protected-resource
+  metadata (the protected resource is the hosted MCP endpoint https://usebolsai.com/api/mcp). security.txt,
+  openid-configuration, api-catalog, ai-plugin.json, agent-card.json and agent.json all return the SPA''s
+  HTML 404 page on both hosts — recorded as misses.
+
+
+  MCP-host OAuth discovery added 2026-09-19 (roadmap#321/#337): the harvest visits a provider''s primary
+  hosts, and RFC 9728 protected-resource metadata lives on the MCP host, so these documents existed and
+  were invisible to the scorer. Fetched live and validated on `resource`/`issuer`; one negative control
+  per host.'
 hosts:
-  - host: usebolsai.com
-    documents:
-      - path: /.well-known/oauth-authorization-server
-        status: 200
-        file: well-known/bolsai-oauth-authorization-server.json
-      - path: /.well-known/oauth-protected-resource
-        status: 200
-        file: well-known/bolsai-oauth-protected-resource.json
-      - path: /.well-known/oauth-protected-resource/api/mcp
-        status: 200
-        file: well-known/bolsai-oauth-protected-resource.json
-      - path: /.well-known/security.txt
-        status: 404
-        file: null
-      - path: /.well-known/openid-configuration
-        status: 404
-        file: null
-      - path: /.well-known/api-catalog
-        status: 404
-        file: null
-      - path: /.well-known/ai-plugin.json
-        status: 404
-        file: null
-      - path: /.well-known/agent-card.json
-        status: 404
-        file: null
-      - path: /.well-known/agent.json
-        status: 404
-        file: null
-  - host: api.usebolsai.com
-    documents:
-      - path: /.well-known/oauth-authorization-server
-        status: 200
-        file: well-known/bolsai-oauth-authorization-server.json
-      - path: /.well-known/oauth-protected-resource
-        status: 200
-        file: well-known/bolsai-oauth-protected-resource.json
-      - path: /.well-known/security.txt
-        status: 404
-        file: null
-      - path: /.well-known/openid-configuration
-        status: 404
-        file: null
-      - path: /.well-known/api-catalog
-        status: 404
-        file: null
-      - path: /.well-known/ai-plugin.json
-        status: 404
-        file: null
-      - path: /.well-known/agent-card.json
-        status: 404
-        file: null
-      - path: /.well-known/agent.json
-        status: 404
-        file: null
+- host: usebolsai.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: bolsai-oauth-authorization-server.json
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: bolsai-oauth-protected-resource.json
+  - path: /.well-known/oauth-protected-resource/api/mcp
+    status: 200
+    file: bolsai-oauth-protected-resource.json
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: bolsai-usebolsai-oauth-protected-resource.json
+    bytes: 185
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: bolsai-usebolsai-oauth-authorization-server.json
+    bytes: 412
+  path_echo_control: passed
+- host: api.usebolsai.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: bolsai-oauth-authorization-server.json
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: bolsai-oauth-protected-resource.json
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+x-mcp-probe:
+  probed: '2026-09-19'
+  issue: roadmap#321, roadmap#337
+  documents:
+  - host: https://usebolsai.com
+    path: /.well-known/oauth-protected-resource
+    file: bolsai-usebolsai-oauth-protected-resource.json
+  - host: https://usebolsai.com
+    path: /.well-known/oauth-authorization-server
+    file: bolsai-usebolsai-oauth-authorization-server.json
+  validated_on: resource (RFC 9728) / issuer (RFC 8414, OIDC)
+  negative_control: one per host; a 2xx JSON object at an impossible path discards the host

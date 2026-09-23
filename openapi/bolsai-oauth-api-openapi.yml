@@ -1,0 +1,282 @@
+openapi: 3.2.0
+info:
+  title: bolsai OAUTH API
+  description: 'API de dados financeiros do Brasil — ações, FIIs, fundamentos, dividendos, macro.
+
+
+    **Autenticação:** Inclua sua API key no header `X-API-Key`.
+
+
+    **Criar conta:** Faça login com Google em https://usebolsai.com
+
+
+    **Planos:** Grátis (200 req/dia) · Pro R$49/mês (10K req/dia, todos endpoints)'
+  version: 1.0.0
+tags:
+- name: OAuth
+paths:
+  /.well-known/oauth-protected-resource/api/mcp:
+    get:
+      tags:
+      - OAuth
+      summary: Protected Resource For Mcp
+      operationId: protected_resource_for_mcp__well_known_oauth_protected_resource_api_mcp_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeader: []
+  /.well-known/oauth-protected-resource:
+    get:
+      tags:
+      - OAuth
+      summary: Protected Resource
+      operationId: protected_resource__well_known_oauth_protected_resource_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeader: []
+  /.well-known/oauth-authorization-server:
+    get:
+      tags:
+      - OAuth
+      summary: Authorization Server
+      description: RFC 8414 metadata for the authorization server backing the MCP endpoint.
+      operationId: authorization_server__well_known_oauth_authorization_server_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeader: []
+  /api/v1/oauth/authorize:
+    get:
+      tags:
+      - OAuth
+      summary: Authorize
+      description: 'Start OAuth flow: redirect user to Google login.
+
+
+        ChatGPT sends:
+
+        GET /oauth/authorize?client_id=bolsai&redirect_uri=https://chat.openai.com/...&state=xyz&response_type=code
+
+
+        MCP clients additionally send PKCE (code_challenge + S256) and an RFC 8707
+
+        `resource` naming the MCP endpoint. We store them with the redirect_uri + state
+
+        in session, then send the user to Google.'
+      operationId: authorize_api_v1_oauth_authorize_get
+      parameters:
+      - name: client_id
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Client Id
+      - name: redirect_uri
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Redirect Uri
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: State
+      - name: response_type
+        in: query
+        required: false
+        schema:
+          type: string
+          default: code
+          title: Response Type
+      - name: code_challenge
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Code Challenge
+      - name: code_challenge_method
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Code Challenge Method
+      - name: resource
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Resource
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/oauth/callback:
+    get:
+      tags:
+      - OAuth
+      summary: Callback
+      description: Handle Google callback, then redirect back to the third-party app with an auth code.
+      operationId: callback_api_v1_oauth_callback_get
+      parameters:
+      - name: code
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Code
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: State
+      - name: error
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Error
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/oauth/token:
+    post:
+      tags:
+      - OAuth
+      summary: Token
+      description: 'Exchange authorization code for API key (as access_token).
+
+
+        ChatGPT sends:
+
+        POST /oauth/token
+
+        Content-Type: application/x-www-form-urlencoded
+
+        grant_type=authorization_code&code=...&redirect_uri=...&client_id=...&client_secret=...'
+      operationId: token_api_v1_oauth_token_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeader: []
+  /api/v1/oauth/register:
+    post:
+      tags:
+      - OAuth
+      summary: Register
+      description: 'Dynamic Client Registration (RFC 7591).
+
+
+        Claude''s connector flow attempts DCR and reports a registration failure rather than
+
+        falling back, so this has to exist for the "paste a URL" path to work at all.
+
+
+        No client record is stored. Authorization is anchored on the user''s Google login and
+
+        on the redirect_uri allowlist, neither of which a client_id would strengthen: the
+
+        codes are single-use, short-lived and PKCE-bound. Issuing an identifier without
+
+        persisting one keeps that honest rather than implying a registry we don''t consult.'
+      operationId: register_api_v1_oauth_register_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeader: []
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Get your key at POST /api/v1/keys/register

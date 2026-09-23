@@ -1,0 +1,143 @@
+openapi: 3.2.0
+info:
+  title: Bolsai Dividends API
+  version: 1.0.0
+  description: 'Operations tagged Dividends across 2 of this provider''s published API definitions: bolsai-gpt-actions-schema.json, bolsai-openapi-original.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://usebolsai.com/api/v1
+tags:
+- name: Dividends
+paths:
+  /dividends/{ticker}:
+    get:
+      operationId: getDividends
+      summary: Histórico de dividendos e JCP
+      description: Dividend yield TTM, resumo anual e lista de pagamentos. Funciona para ações e FIIs.
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z]{4}\d{0,2}$
+      - name: years
+        in: query
+        schema:
+          type: integer
+          default: 5
+          minimum: 1
+          maximum: 20
+        description: Anos de histórico
+      responses:
+        '200':
+          description: Histórico de dividendos
+      tags:
+      - Dividends
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /api/v1/dividends/{ticker}:
+    get:
+      tags:
+      - Dividends
+      summary: Get Dividends
+      description: Get dividend history and yield for a ticker.
+      operationId: get_dividends_api_v1_dividends__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z][A-Za-z0-9]{3}\d{0,2}$
+          description: Ticker
+          title: Ticker
+        description: Ticker
+      - name: years
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 20
+          minimum: 1
+          description: Years of history
+          default: 5
+          title: Years
+        description: Years of history
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://usebolsai.com/api/v1/oauth/authorize
+          tokenUrl: https://usebolsai.com/api/v1/oauth/token
+          scopes: {}
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Get your key at POST /api/v1/keys/register
+x-refined-from:
+- bolsai-gpt-actions-schema.json
+- bolsai-openapi-original.json

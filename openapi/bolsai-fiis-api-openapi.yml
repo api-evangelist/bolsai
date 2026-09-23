@@ -1,0 +1,530 @@
+openapi: 3.2.0
+info:
+  title: Bolsai Fiis API
+  version: 1.0.0
+  description: 'Operations tagged Fiis across 2 of this provider''s published API definitions: bolsai-gpt-actions-schema.json, bolsai-openapi-original.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://usebolsai.com/api/v1
+tags:
+- name: Fiis
+paths:
+  /fiis/:
+    get:
+      operationId: listFIIs
+      summary: Lista todos os FIIs
+      description: Lista fundos imobiliários com segmento, tipo de gestão e número de cotistas.
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 500
+          minimum: 1
+          maximum: 5000
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      responses:
+        '200':
+          description: Lista de FIIs
+      tags:
+      - Fiis
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /fiis/{ticker}:
+    get:
+      operationId: getFIIDetails
+      summary: Fundamentos de um FII
+      description: P/VP, dividend yield TTM, valor patrimonial, NAV, cotistas, segmento.
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z]{4}\d{0,2}$
+        description: 'Ticker do FII (ex: HGLG11 ou HGLG)'
+      responses:
+        '200':
+          description: Fundamentos do FII
+      tags:
+      - Fiis
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /fiis/{ticker}/history:
+    get:
+      operationId: getFIIHistory
+      summary: Histórico mensal do FII
+      description: P/VP, dividend yield, NAV e cotistas mês a mês.
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z]{4}\d{0,2}$
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 24
+          minimum: 1
+          maximum: 120
+        description: Meses de histórico
+      responses:
+        '200':
+          description: Histórico mensal
+      tags:
+      - Fiis
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /fiis/{ticker}/distributions:
+    get:
+      operationId: getFIIDistributions
+      summary: Histórico de distribuições do FII
+      description: Rendimentos mensais R$/cota, DY mensal, resumo anual e yield TTM.
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z]{4}\d{0,2}$
+      - name: years
+        in: query
+        schema:
+          type: integer
+          default: 5
+          minimum: 1
+          maximum: 20
+      responses:
+        '200':
+          description: Histórico de distribuições
+      tags:
+      - Fiis
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /api/v1/fiis/:
+    get:
+      tags:
+      - Fiis
+      summary: List Fiis
+      description: List all FII tickers with latest data.
+      operationId: list_fiis_api_v1_fiis__get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 5000
+          minimum: 1
+          default: 500
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/fiis/screener:
+    get:
+      tags:
+      - Fiis
+      summary: Screen Fiis
+      description: 'Screen FIIs by P/VP, dividend yield, NAV, vacancy, etc.
+
+
+        Use {metric}_gt and {metric}_lt query params to filter
+
+        (e.g. ?pvp_lt=1÷nd_yield_ttm_gt=8&vacancy_pct_lt=5).'
+      operationId: screen_fiis_api_v1_fiis_screener_get
+      parameters:
+      - name: segment
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by segment (case-insensitive)
+          title: Segment
+        description: Filter by segment (case-insensitive)
+      - name: management_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by management type (case-insensitive)
+          title: Management Type
+        description: Filter by management type (case-insensitive)
+      - name: mandate
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by mandate (Renda/Ganho de Capital)
+          title: Mandate
+        description: Filter by mandate (Renda/Ganho de Capital)
+      - name: fund_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by fund_type (Tijolo/Papel/Fundo de Fundos/Híbrido/Fiagro)
+          title: Fund Type
+        description: Filter by fund_type (Tijolo/Papel/Fundo de Fundos/Híbrido/Fiagro)
+      - name: administrator
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by administrator (case-insensitive exact match)
+          title: Administrator
+        description: Filter by administrator (case-insensitive exact match)
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Metric to sort by
+          default: dividend_yield_ttm
+          title: Sort
+        description: Metric to sort by
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Sort order: asc or desc'
+          default: desc
+          title: Order
+        description: 'Sort order: asc or desc'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 500
+          minimum: 1
+          description: Results per page
+          default: 50
+          title: Limit
+        description: Results per page
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Pagination offset
+          default: 0
+          title: Offset
+        description: Pagination offset
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/fiis/{ticker}:
+    get:
+      tags:
+      - Fiis
+      summary: Get Fii Fundamentals
+      description: 'Get FII fundamentals: P/VP, DY, NAV, shareholders.'
+      operationId: get_fii_fundamentals_api_v1_fiis__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z][A-Za-z0-9]{3}\d{0,2}$
+          description: Ticker
+          title: Ticker
+        description: Ticker
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/fiis/{ticker}/history:
+    get:
+      tags:
+      - Fiis
+      summary: Get Fii History
+      description: 'Get FII monthly history: P/VP, DY, NAV evolution.'
+      operationId: get_fii_history_api_v1_fiis__ticker__history_get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z][A-Za-z0-9]{3}\d{0,2}$
+          description: Ticker
+          title: Ticker
+        description: Ticker
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 120
+          minimum: 1
+          description: Number of monthly periods
+          default: 24
+          title: Limit
+        description: Number of monthly periods
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/fiis/{ticker}/distributions:
+    get:
+      tags:
+      - Fiis
+      summary: Get Fii Distributions
+      description: 'Get FII distribution history: monthly R$/share, annual totals, trailing 12m yield.'
+      operationId: get_fii_distributions_api_v1_fiis__ticker__distributions_get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z][A-Za-z0-9]{3}\d{0,2}$
+          description: Ticker
+          title: Ticker
+        description: Ticker
+      - name: years
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 20
+          minimum: 1
+          description: Years of history
+          default: 5
+          title: Years
+        description: Years of history
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/fiis/{ticker}/tenants:
+    get:
+      tags:
+      - Fiis
+      summary: Get Fii Tenants
+      description: 'Get tenant sector concentration for a FII (latest quarter).
+
+
+        Source: CVM quarterly informe (imovel_renda_acabado_inquilino.csv).
+
+        Tenants are anonymized and aggregated by sector (Comércio, Serviço, etc.).'
+      operationId: get_fii_tenants_api_v1_fiis__ticker__tenants_get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z][A-Za-z0-9]{3}\d{0,2}$
+          description: Ticker
+          title: Ticker
+        description: Ticker
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://usebolsai.com/api/v1/oauth/authorize
+          tokenUrl: https://usebolsai.com/api/v1/oauth/token
+          scopes: {}
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Get your key at POST /api/v1/keys/register
+x-refined-from:
+- bolsai-gpt-actions-schema.json
+- bolsai-openapi-original.json

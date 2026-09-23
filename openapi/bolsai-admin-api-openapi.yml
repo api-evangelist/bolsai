@@ -1,0 +1,122 @@
+openapi: 3.2.0
+info:
+  title: bolsai Admin API
+  description: 'API de dados financeiros do Brasil — ações, FIIs, fundamentos, dividendos, macro.
+
+
+    **Autenticação:** Inclua sua API key no header `X-API-Key`.
+
+
+    **Criar conta:** Faça login com Google em https://usebolsai.com
+
+
+    **Planos:** Grátis (200 req/dia) · Pro R$49/mês (10K req/dia, todos endpoints)'
+  version: 1.0.0
+tags:
+- name: Admin
+paths:
+  /api/v1/admin/validation/fii-tickers:
+    get:
+      tags:
+      - Admin
+      summary: Validate Fii Tickers
+      description: 'FIIs trading on B3 that carry no fii_monthly row — usually a rename.
+
+
+        CVM never refreshes the cadastral ISIN that ``etl.parsers.cvm_fii.fii_ticker``
+
+        derives the trading code from, so a renamed fund keeps answering under its old
+
+        code and 404s under the new one until someone pins it in
+
+        ``FII_TICKER_OVERRIDES``. This lists the funds needing that.
+
+
+        Scoped to BDI 12: Fiagro''s 13/14 also carry FI-Infra and FIDC, which have no
+
+        fii_monthly rows by design and would bury the signal. Subscription rights
+
+        (KNSC12 and friends) show up here too — they are not funds, so ignore them.'
+      operationId: validate_fii_tickers_api_v1_admin_validation_fii_tickers_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeader: []
+  /api/v1/admin/validation/prices:
+    get:
+      tags:
+      - Admin
+      summary: Validate Prices
+      description: Compare all active tickers against Yahoo Finance. Cached 24h.
+      operationId: validate_prices_api_v1_admin_validation_prices_get
+      parameters:
+      - name: since
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Start date YYYY-MM-DD
+          default: '2020-01-01'
+          title: Since
+        description: Start date YYYY-MM-DD
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Get your key at POST /api/v1/keys/register

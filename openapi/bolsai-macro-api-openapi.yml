@@ -1,0 +1,274 @@
+openapi: 3.2.0
+info:
+  title: Bolsai Macro API
+  version: 1.0.0
+  description: 'Operations tagged Macro across 2 of this provider''s published API definitions: bolsai-gpt-actions-schema.json, bolsai-openapi-original.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://usebolsai.com/api/v1
+tags:
+- name: Macro
+paths:
+  /macro/:
+    get:
+      operationId: listMacroSeries
+      summary: Lista séries macro disponíveis
+      description: 'Séries disponíveis: selic, selic_target, ipca, cdi, usd_brl, eur_brl, igpm.'
+      responses:
+        '200':
+          description: Séries disponíveis
+      tags:
+      - Macro
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /macro/{series_name}:
+    get:
+      operationId: getMacroSeries
+      summary: Dados de indicador macroeconômico
+      description: 'Séries históricas do Banco Central: SELIC, IPCA, CDI, IGP-M e câmbio USD/BRL e EUR/BRL.'
+      parameters:
+      - name: series_name
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - selic
+          - selic_target
+          - ipca
+          - cdi
+          - usd_brl
+          - eur_brl
+          - igpm
+      - name: start
+        in: query
+        schema:
+          type: string
+          format: date
+      - name: end
+        in: query
+        schema:
+          type: string
+          format: date
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 252
+          minimum: 1
+          maximum: 5000
+      responses:
+        '200':
+          description: Série temporal
+      tags:
+      - Macro
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /api/v1/macro/:
+    get:
+      tags:
+      - Macro
+      summary: List Series
+      operationId: list_series_api_v1_macro__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeader: []
+  /api/v1/macro/{series_name}/stats:
+    get:
+      tags:
+      - Macro
+      summary: Get Series Stats
+      description: 'Statistics for a macro series.
+
+
+        Level series (Selic, CDI, PTAX) get price-style change/return math. Rate-of-change
+
+        series (IPCA, IGP-M) get compounded accumulation instead: a percent change *of* a
+
+        percent change is meaningless, and dividing by a negative prior month (IGP-M
+
+        deflates regularly) flips the sign. `series_kind` tells the two apart.'
+      operationId: get_series_stats_api_v1_macro__series_name__stats_get
+      parameters:
+      - name: series_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Series Name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/macro/{series_name}:
+    get:
+      tags:
+      - Macro
+      summary: Get Series
+      operationId: get_series_api_v1_macro__series_name__get
+      parameters:
+      - name: series_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Series Name
+      - name: start
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Start
+      - name: end
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: End
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 5000
+          minimum: 1
+          default: 252
+          title: Limit
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MacroSeriesResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    MacroDataPoint:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+        value:
+          type: number
+          title: Value
+      type: object
+      required:
+      - date
+      - value
+      title: MacroDataPoint
+    MacroSeriesResponse:
+      properties:
+        series:
+          type: string
+          title: Series
+        series_code:
+          type: string
+          title: Series Code
+        count:
+          type: integer
+          title: Count
+        data:
+          items:
+            $ref: '#/components/schemas/MacroDataPoint'
+          type: array
+          title: Data
+      type: object
+      required:
+      - series
+      - series_code
+      - count
+      - data
+      title: MacroSeriesResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://usebolsai.com/api/v1/oauth/authorize
+          tokenUrl: https://usebolsai.com/api/v1/oauth/token
+          scopes: {}
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Get your key at POST /api/v1/keys/register
+x-refined-from:
+- bolsai-gpt-actions-schema.json
+- bolsai-openapi-original.json

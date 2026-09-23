@@ -1,0 +1,428 @@
+openapi: 3.2.0
+info:
+  title: Bolsai Companies API
+  version: 1.0.0
+  description: 'Operations tagged Companies across 2 of this provider''s published API definitions: bolsai-gpt-actions-schema.json, bolsai-openapi-original.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://usebolsai.com/api/v1
+tags:
+- name: Companies
+paths:
+  /companies/:
+    get:
+      operationId: listCompanies
+      summary: Buscar empresas
+      description: Busca por nome, setor ou status. Retorna dados cadastrais da B3.
+      parameters:
+      - name: sector
+        in: query
+        schema:
+          type: string
+        description: Filtrar por setor
+      - name: status
+        in: query
+        schema:
+          type: string
+          default: ATIVO
+        description: ATIVO, INATIVO ou ALL
+      - name: search
+        in: query
+        schema:
+          type: string
+          maxLength: 100
+        description: Busca por nome
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 500
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      responses:
+        '200':
+          description: Lista de empresas
+      tags:
+      - Companies
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /companies/{ticker}:
+    get:
+      operationId: getCompanyDetails
+      summary: Detalhes de uma empresa
+      description: CNPJ, setor, subsetor, data de listagem, código CVM.
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Detalhes da empresa
+      tags:
+      - Companies
+      security:
+      - oauth2: []
+    servers:
+    - url: https://usebolsai.com/api/v1
+  /api/v1/companies/:
+    get:
+      tags:
+      - Companies
+      summary: List Companies
+      operationId: list_companies_api_v1_companies__get
+      parameters:
+      - name: sector
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by sector
+          title: Sector
+        description: Filter by sector
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by status (e.g. ATIVO)
+          title: Status
+        description: Filter by status (e.g. ATIVO)
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 100
+          - type: 'null'
+          description: Search corporate or trade name
+          title: Search
+        description: Search corporate or trade name
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 500
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse_CompanySummary_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+  /api/v1/companies/sectors:
+    get:
+      tags:
+      - Companies
+      summary: List Sectors
+      description: List all sectors with company counts. Only includes active companies with tickers.
+      operationId: list_sectors_api_v1_companies_sectors_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeader: []
+  /api/v1/companies/{ticker}:
+    get:
+      tags:
+      - Companies
+      summary: Get Company
+      operationId: get_company_api_v1_companies__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Ticker
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Response format: json or csv'
+          default: json
+          title: Format
+        description: 'Response format: json or csv'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyDetail'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - ApiKeyHeader: []
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CompanySummary:
+      properties:
+        cvm_code:
+          type: string
+          title: Cvm Code
+        cnpj:
+          type: string
+          title: Cnpj
+        corporate_name:
+          type: string
+          title: Corporate Name
+        trade_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Trade Name
+        ticker_primary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ticker Primary
+        sector:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sector
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      type: object
+      required:
+      - cvm_code
+      - cnpj
+      - corporate_name
+      - trade_name
+      - sector
+      - status
+      title: CompanySummary
+      description: Compact company representation for list endpoints.
+    CompanyDetail:
+      properties:
+        cvm_code:
+          type: string
+          title: Cvm Code
+        cnpj:
+          type: string
+          title: Cnpj
+        corporate_name:
+          type: string
+          title: Corporate Name
+        trade_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Trade Name
+        ticker_primary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ticker Primary
+        queried_ticker:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Queried Ticker
+        tickers:
+          items:
+            type: string
+          type: array
+          title: Tickers
+          default: []
+        sector:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sector
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+        registration_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Registration Date
+        registration_category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Registration Category
+        market_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Market Type
+        country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+        city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: City
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        website:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Website
+      type: object
+      required:
+      - cvm_code
+      - cnpj
+      - corporate_name
+      - trade_name
+      - sector
+      - status
+      - registration_date
+      - registration_category
+      - market_type
+      - country
+      - state
+      - city
+      - email
+      - website
+      title: CompanyDetail
+      description: Full company representation for detail endpoint.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PaginatedResponse_CompanySummary_:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/CompanySummary'
+          type: array
+          title: Data
+        count:
+          type: integer
+          title: Count
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+        limit:
+          type: integer
+          title: Limit
+      type: object
+      required:
+      - data
+      - count
+      - total
+      - offset
+      - limit
+      title: PaginatedResponse[CompanySummary]
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://usebolsai.com/api/v1/oauth/authorize
+          tokenUrl: https://usebolsai.com/api/v1/oauth/token
+          scopes: {}
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Get your key at POST /api/v1/keys/register
+x-refined-from:
+- bolsai-gpt-actions-schema.json
+- bolsai-openapi-original.json
