@@ -21,9 +21,7 @@
     "bolsai-oauth-api-openapi.yml",
     "bolsai-screener-api-openapi.yml"
   ],
-  "archived": [
-    "deleted 1 superseded output(s) from the previous generation"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
@@ -69,8 +67,7 @@
     "tag 'Fundamentals' spans 2 source specs (bolsai-gpt-actions-schema.json, bolsai-openapi-original.json): per-path servers applied",
     "tag 'Macro' spans 2 source specs (bolsai-gpt-actions-schema.json, bolsai-openapi-original.json): per-path servers applied",
     "tag 'Stocks' spans 2 source specs (bolsai-gpt-actions-schema.json, bolsai-openapi-original.json): per-path servers applied",
-    "superseded outputs removed: bolsai-o-auth-api-openapi.yml",
-    "apis.yml register: written (+1 apis, 15 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "_original/bolsai-openapi.json: archived document superseded by a larger archived document",
@@ -86,7 +83,7 @@
     "bolsai-fundamentals-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "bolsai-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "bolsai-macro-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "bolsai-o-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bolsai-oauth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "bolsai-screener-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "bolsai-stocks-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]

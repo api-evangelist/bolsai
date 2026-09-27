@@ -348,9 +348,10 @@ apis:
   humanURL: https://usebolsai.com/docs
   baseURL: https://api.usebolsai.com/api/v1
   tags:
-  - Financial
+  - Finance
   tags_raw:
   - Financials
+  - Financial
   properties:
   - type: OpenAPI
     url: openapi/bolsai-financials-api-openapi.yml

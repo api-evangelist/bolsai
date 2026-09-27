@@ -218,6 +218,50 @@ paths:
       - ApiKeyHeader: []
 components:
   schemas:
+    ReplyRequest:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: ReplyRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post
     HTTPValidationError:
       properties:
         detail:
@@ -247,50 +291,6 @@ components:
       required:
       - message
       title: Body_submit_feedback_api_v1_feedback__post
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ReplyRequest:
-      properties:
-        message:
-          type: string
-          title: Message
-      type: object
-      required:
-      - message
-      title: ReplyRequest
-    Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post:
-      properties:
-        message:
-          type: string
-          title: Message
-      type: object
-      required:
-      - message
-      title: Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post
   securitySchemes:
     ApiKeyHeader:
       type: apiKey

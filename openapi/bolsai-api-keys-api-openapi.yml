@@ -157,36 +157,17 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
+    CreateKeyRequest:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    UsageResponse:
-      properties:
-        tier:
+        label:
           type: string
-          title: Tier
-        used_today:
-          type: integer
-          title: Used Today
-        daily_limit:
-          type: integer
-          title: Daily Limit
-        remaining:
-          type: integer
-          title: Remaining
+          maxLength: 50
+          minLength: 1
+          title: Label
       type: object
       required:
-      - tier
-      - used_today
-      - daily_limit
-      - remaining
-      title: UsageResponse
+      - label
+      title: CreateKeyRequest
     ValidationError:
       properties:
         loc:
@@ -213,17 +194,54 @@ components:
       - msg
       - type
       title: ValidationError
-    CreateKeyRequest:
+    UsageResponse:
       properties:
-        label:
+        tier:
           type: string
-          maxLength: 50
-          minLength: 1
-          title: Label
+          title: Tier
+        used_today:
+          type: integer
+          title: Used Today
+        daily_limit:
+          type: integer
+          title: Daily Limit
+        remaining:
+          type: integer
+          title: Remaining
       type: object
       required:
+      - tier
+      - used_today
+      - daily_limit
+      - remaining
+      title: UsageResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    KeySecretResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+        label:
+          type: string
+          title: Label
+        key:
+          type: string
+          title: Key
+      type: object
+      required:
+      - id
       - label
-      title: CreateKeyRequest
+      - key
+      title: KeySecretResponse
+      description: Returned only when creating or rotating — full secret shown once.
     KeyListItem:
       properties:
         id:
@@ -257,24 +275,6 @@ components:
       - created_at
       - last_used_at
       title: KeyListItem
-    KeySecretResponse:
-      properties:
-        id:
-          type: integer
-          title: Id
-        label:
-          type: string
-          title: Label
-        key:
-          type: string
-          title: Key
-      type: object
-      required:
-      - id
-      - label
-      - key
-      title: KeySecretResponse
-      description: Returned only when creating or rotating — full secret shown once.
   securitySchemes:
     ApiKeyHeader:
       type: apiKey

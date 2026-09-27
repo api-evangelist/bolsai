@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: bolsai OAUTH API
+  title: bolsai OAuth API
   description: 'API de dados financeiros do Brasil — ações, FIIs, fundamentos, dividendos, macro.
 
 

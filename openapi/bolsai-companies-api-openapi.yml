@@ -206,56 +206,59 @@ paths:
       - ApiKeyHeader: []
 components:
   schemas:
-    HTTPValidationError:
+    PaginatedResponse_CompanySummary_:
       properties:
-        detail:
+        data:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/CompanySummary'
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    CompanySummary:
-      properties:
-        cvm_code:
-          type: string
-          title: Cvm Code
-        cnpj:
-          type: string
-          title: Cnpj
-        corporate_name:
-          type: string
-          title: Corporate Name
-        trade_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Trade Name
-        ticker_primary:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Ticker Primary
-        sector:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sector
-        status:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Status
+          title: Data
+        count:
+          type: integer
+          title: Count
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+        limit:
+          type: integer
+          title: Limit
       type: object
       required:
-      - cvm_code
-      - cnpj
-      - corporate_name
-      - trade_name
-      - sector
-      - status
-      title: CompanySummary
-      description: Compact company representation for list endpoints.
+      - data
+      - count
+      - total
+      - offset
+      - limit
+      title: PaginatedResponse[CompanySummary]
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     CompanyDetail:
       properties:
         cvm_code:
@@ -357,59 +360,56 @@ components:
       - website
       title: CompanyDetail
       description: Full company representation for detail endpoint.
-    ValidationError:
+    HTTPValidationError:
       properties:
-        loc:
+        detail:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CompanySummary:
+      properties:
+        cvm_code:
           type: string
-          title: Message
-        type:
+          title: Cvm Code
+        cnpj:
           type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Cnpj
+        corporate_name:
+          type: string
+          title: Corporate Name
+        trade_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Trade Name
+        ticker_primary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ticker Primary
+        sector:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sector
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    PaginatedResponse_CompanySummary_:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/CompanySummary'
-          type: array
-          title: Data
-        count:
-          type: integer
-          title: Count
-        total:
-          type: integer
-          title: Total
-        offset:
-          type: integer
-          title: Offset
-        limit:
-          type: integer
-          title: Limit
-      type: object
-      required:
-      - data
-      - count
-      - total
-      - offset
-      - limit
-      title: PaginatedResponse[CompanySummary]
+      - cvm_code
+      - cnpj
+      - corporate_name
+      - trade_name
+      - sector
+      - status
+      title: CompanySummary
+      description: Compact company representation for list endpoints.
   securitySchemes:
     oauth2:
       type: oauth2

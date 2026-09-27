@@ -193,43 +193,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    MacroDataPoint:
-      properties:
-        date:
-          type: string
-          format: date
-          title: Date
-        value:
-          type: number
-          title: Value
-      type: object
-      required:
-      - date
-      - value
-      title: MacroDataPoint
-    MacroSeriesResponse:
-      properties:
-        series:
-          type: string
-          title: Series
-        series_code:
-          type: string
-          title: Series Code
-        count:
-          type: integer
-          title: Count
-        data:
-          items:
-            $ref: '#/components/schemas/MacroDataPoint'
-          type: array
-          title: Data
-      type: object
-      required:
-      - series
-      - series_code
-      - count
-      - data
-      title: MacroSeriesResponse
     ValidationError:
       properties:
         loc:
@@ -256,6 +219,43 @@ components:
       - msg
       - type
       title: ValidationError
+    MacroSeriesResponse:
+      properties:
+        series:
+          type: string
+          title: Series
+        series_code:
+          type: string
+          title: Series Code
+        count:
+          type: integer
+          title: Count
+        data:
+          items:
+            $ref: '#/components/schemas/MacroDataPoint'
+          type: array
+          title: Data
+      type: object
+      required:
+      - series
+      - series_code
+      - count
+      - data
+      title: MacroSeriesResponse
+    MacroDataPoint:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+        value:
+          type: number
+          title: Value
+      type: object
+      required:
+      - date
+      - value
+      title: MacroDataPoint
   securitySchemes:
     oauth2:
       type: oauth2
