@@ -227,6 +227,24 @@ components:
       required:
       - message
       title: ReplyRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post
     ValidationError:
       properties:
         loc:
@@ -253,24 +271,6 @@ components:
       - msg
       - type
       title: ValidationError
-    Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post:
-      properties:
-        message:
-          type: string
-          title: Message
-      type: object
-      required:
-      - message
-      title: Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     Body_submit_feedback_api_v1_feedback__post:
       properties:
         category:

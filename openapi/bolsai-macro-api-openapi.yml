@@ -184,15 +184,6 @@ paths:
       - ApiKeyHeader: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -219,6 +210,29 @@ components:
       - msg
       - type
       title: ValidationError
+    MacroDataPoint:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+        value:
+          type: number
+          title: Value
+      type: object
+      required:
+      - date
+      - value
+      title: MacroDataPoint
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     MacroSeriesResponse:
       properties:
         series:
@@ -242,20 +256,6 @@ components:
       - count
       - data
       title: MacroSeriesResponse
-    MacroDataPoint:
-      properties:
-        date:
-          type: string
-          format: date
-          title: Date
-        value:
-          type: number
-          title: Value
-      type: object
-      required:
-      - date
-      - value
-      title: MacroDataPoint
   securitySchemes:
     oauth2:
       type: oauth2

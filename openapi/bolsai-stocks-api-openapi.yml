@@ -510,6 +510,95 @@ paths:
       - ApiKeyHeader: []
 components:
   schemas:
+    StockHistoryResponse:
+      properties:
+        ticker:
+          type: string
+          title: Ticker
+        count:
+          type: integer
+          title: Count
+        prices:
+          items:
+            $ref: '#/components/schemas/StockPriceItem'
+          type: array
+          title: Prices
+      type: object
+      required:
+      - ticker
+      - count
+      - prices
+      title: StockHistoryResponse
+    StockQuote:
+      properties:
+        ticker:
+          type: string
+          title: Ticker
+        trade_date:
+          type: string
+          format: date
+          title: Trade Date
+        open:
+          type: number
+          title: Open
+        high:
+          type: number
+          title: High
+        low:
+          type: number
+          title: Low
+        close:
+          type: number
+          title: Close
+        volume:
+          type: integer
+          title: Volume
+        traded_amount:
+          type: number
+          title: Traded Amount
+        num_trades:
+          type: integer
+          title: Num Trades
+      type: object
+      required:
+      - ticker
+      - trade_date
+      - open
+      - high
+      - low
+      - close
+      - volume
+      - traded_amount
+      - num_trades
+      title: StockQuote
+    TickersListResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        count:
+          type: integer
+          title: Count
+        tickers:
+          items:
+            type: string
+          type: array
+          title: Tickers
+      type: object
+      required:
+      - total
+      - count
+      - tickers
+      title: TickersListResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -599,95 +688,6 @@ components:
       - traded_amount
       - num_trades
       title: StockPriceItem
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    StockQuote:
-      properties:
-        ticker:
-          type: string
-          title: Ticker
-        trade_date:
-          type: string
-          format: date
-          title: Trade Date
-        open:
-          type: number
-          title: Open
-        high:
-          type: number
-          title: High
-        low:
-          type: number
-          title: Low
-        close:
-          type: number
-          title: Close
-        volume:
-          type: integer
-          title: Volume
-        traded_amount:
-          type: number
-          title: Traded Amount
-        num_trades:
-          type: integer
-          title: Num Trades
-      type: object
-      required:
-      - ticker
-      - trade_date
-      - open
-      - high
-      - low
-      - close
-      - volume
-      - traded_amount
-      - num_trades
-      title: StockQuote
-    TickersListResponse:
-      properties:
-        total:
-          type: integer
-          title: Total
-        count:
-          type: integer
-          title: Count
-        tickers:
-          items:
-            type: string
-          type: array
-          title: Tickers
-      type: object
-      required:
-      - total
-      - count
-      - tickers
-      title: TickersListResponse
-    StockHistoryResponse:
-      properties:
-        ticker:
-          type: string
-          title: Ticker
-        count:
-          type: integer
-          title: Count
-        prices:
-          items:
-            $ref: '#/components/schemas/StockPriceItem'
-          type: array
-          title: Prices
-      type: object
-      required:
-      - ticker
-      - count
-      - prices
-      title: StockHistoryResponse
   securitySchemes:
     oauth2:
       type: oauth2

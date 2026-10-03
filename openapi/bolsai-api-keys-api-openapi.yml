@@ -157,43 +157,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    CreateKeyRequest:
-      properties:
-        label:
-          type: string
-          maxLength: 50
-          minLength: 1
-          title: Label
-      type: object
-      required:
-      - label
-      title: CreateKeyRequest
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     UsageResponse:
       properties:
         tier:
@@ -215,6 +178,17 @@ components:
       - daily_limit
       - remaining
       title: UsageResponse
+    CreateKeyRequest:
+      properties:
+        label:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Label
+      type: object
+      required:
+      - label
+      title: CreateKeyRequest
     HTTPValidationError:
       properties:
         detail:
@@ -224,24 +198,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    KeySecretResponse:
-      properties:
-        id:
-          type: integer
-          title: Id
-        label:
-          type: string
-          title: Label
-        key:
-          type: string
-          title: Key
-      type: object
-      required:
-      - id
-      - label
-      - key
-      title: KeySecretResponse
-      description: Returned only when creating or rotating — full secret shown once.
     KeyListItem:
       properties:
         id:
@@ -275,6 +231,50 @@ components:
       - created_at
       - last_used_at
       title: KeyListItem
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    KeySecretResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+        label:
+          type: string
+          title: Label
+        key:
+          type: string
+          title: Key
+      type: object
+      required:
+      - id
+      - label
+      - key
+      title: KeySecretResponse
+      description: Returned only when creating or rotating — full secret shown once.
   securitySchemes:
     ApiKeyHeader:
       type: apiKey
