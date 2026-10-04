@@ -510,25 +510,6 @@ paths:
       - ApiKeyHeader: []
 components:
   schemas:
-    StockHistoryResponse:
-      properties:
-        ticker:
-          type: string
-          title: Ticker
-        count:
-          type: integer
-          title: Count
-        prices:
-          items:
-            $ref: '#/components/schemas/StockPriceItem'
-          type: array
-          title: Prices
-      type: object
-      required:
-      - ticker
-      - count
-      - prices
-      title: StockHistoryResponse
     StockQuote:
       properties:
         ticker:
@@ -571,60 +552,6 @@ components:
       - traded_amount
       - num_trades
       title: StockQuote
-    TickersListResponse:
-      properties:
-        total:
-          type: integer
-          title: Total
-        count:
-          type: integer
-          title: Count
-        tickers:
-          items:
-            type: string
-          type: array
-          title: Tickers
-      type: object
-      required:
-      - total
-      - count
-      - tickers
-      title: TickersListResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     StockPriceItem:
       properties:
         trade_date:
@@ -688,6 +615,79 @@ components:
       - traded_amount
       - num_trades
       title: StockPriceItem
+    StockHistoryResponse:
+      properties:
+        ticker:
+          type: string
+          title: Ticker
+        count:
+          type: integer
+          title: Count
+        prices:
+          items:
+            $ref: '#/components/schemas/StockPriceItem'
+          type: array
+          title: Prices
+      type: object
+      required:
+      - ticker
+      - count
+      - prices
+      title: StockHistoryResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TickersListResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        count:
+          type: integer
+          title: Count
+        tickers:
+          items:
+            type: string
+          type: array
+          title: Tickers
+      type: object
+      required:
+      - total
+      - count
+      - tickers
+      title: TickersListResponse
   securitySchemes:
     oauth2:
       type: oauth2

@@ -218,15 +218,6 @@ paths:
       - ApiKeyHeader: []
 components:
   schemas:
-    ReplyRequest:
-      properties:
-        message:
-          type: string
-          title: Message
-      type: object
-      required:
-      - message
-      title: ReplyRequest
     HTTPValidationError:
       properties:
         detail:
@@ -236,15 +227,26 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post:
+    Body_submit_feedback_api_v1_feedback__post:
       properties:
+        category:
+          type: string
+          title: Category
+          default: geral
         message:
           type: string
           title: Message
+        files:
+          items:
+            type: string
+            contentMediaType: application/octet-stream
+          type: array
+          title: Files
+          default: []
       type: object
       required:
       - message
-      title: Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post
+      title: Body_submit_feedback_api_v1_feedback__post
     ValidationError:
       properties:
         loc:
@@ -271,26 +273,24 @@ components:
       - msg
       - type
       title: ValidationError
-    Body_submit_feedback_api_v1_feedback__post:
+    ReplyRequest:
       properties:
-        category:
-          type: string
-          title: Category
-          default: geral
         message:
           type: string
           title: Message
-        files:
-          items:
-            type: string
-            contentMediaType: application/octet-stream
-          type: array
-          title: Files
-          default: []
       type: object
       required:
       - message
-      title: Body_submit_feedback_api_v1_feedback__post
+      title: ReplyRequest
+    Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: Body_admin_reply_api_v1_feedback_admin__feedback_id__reply_post
   securitySchemes:
     ApiKeyHeader:
       type: apiKey

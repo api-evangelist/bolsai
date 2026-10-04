@@ -157,47 +157,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    UsageResponse:
-      properties:
-        tier:
-          type: string
-          title: Tier
-        used_today:
-          type: integer
-          title: Used Today
-        daily_limit:
-          type: integer
-          title: Daily Limit
-        remaining:
-          type: integer
-          title: Remaining
-      type: object
-      required:
-      - tier
-      - used_today
-      - daily_limit
-      - remaining
-      title: UsageResponse
-    CreateKeyRequest:
-      properties:
-        label:
-          type: string
-          maxLength: 50
-          minLength: 1
-          title: Label
-      type: object
-      required:
-      - label
-      title: CreateKeyRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     KeyListItem:
       properties:
         id:
@@ -231,6 +190,36 @@ components:
       - created_at
       - last_used_at
       title: KeyListItem
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UsageResponse:
+      properties:
+        tier:
+          type: string
+          title: Tier
+        used_today:
+          type: integer
+          title: Used Today
+        daily_limit:
+          type: integer
+          title: Daily Limit
+        remaining:
+          type: integer
+          title: Remaining
+      type: object
+      required:
+      - tier
+      - used_today
+      - daily_limit
+      - remaining
+      title: UsageResponse
     ValidationError:
       properties:
         loc:
@@ -257,6 +246,17 @@ components:
       - msg
       - type
       title: ValidationError
+    CreateKeyRequest:
+      properties:
+        label:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Label
+      type: object
+      required:
+      - label
+      title: CreateKeyRequest
     KeySecretResponse:
       properties:
         id:

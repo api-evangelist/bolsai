@@ -141,6 +141,33 @@ paths:
       - ApiKeyHeader: []
 components:
   schemas:
+    FinancialsResponse:
+      properties:
+        ticker:
+          type: string
+          title: Ticker
+        cvm_code:
+          type: string
+          title: Cvm Code
+        report_type:
+          type: string
+          title: Report Type
+        count:
+          type: integer
+          title: Count
+        statements:
+          items:
+            $ref: '#/components/schemas/FinancialLineItem'
+          type: array
+          title: Statements
+      type: object
+      required:
+      - ticker
+      - cvm_code
+      - report_type
+      - count
+      - statements
+      title: FinancialsResponse
     ValidationError:
       properties:
         loc:
@@ -176,33 +203,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    FinancialsResponse:
-      properties:
-        ticker:
-          type: string
-          title: Ticker
-        cvm_code:
-          type: string
-          title: Cvm Code
-        report_type:
-          type: string
-          title: Report Type
-        count:
-          type: integer
-          title: Count
-        statements:
-          items:
-            $ref: '#/components/schemas/FinancialLineItem'
-          type: array
-          title: Statements
-      type: object
-      required:
-      - ticker
-      - cvm_code
-      - report_type
-      - count
-      - statements
-      title: FinancialsResponse
     FinancialLineItem:
       properties:
         reference_date:

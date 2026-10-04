@@ -206,15 +206,6 @@ paths:
       - ApiKeyHeader: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     CompanySummary:
       properties:
         cvm_code:
@@ -384,6 +375,15 @@ components:
       - offset
       - limit
       title: PaginatedResponse[CompanySummary]
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
