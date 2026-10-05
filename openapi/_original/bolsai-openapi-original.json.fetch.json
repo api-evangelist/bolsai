@@ -1,0 +1,12 @@
+{
+ "url": "https://api.usebolsai.com/openapi.json",
+ "requested_url": "https://api.usebolsai.com/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 55720,
+ "sha256": "614bf9f89e927d6523c8443b40ed508d23f68e02045bc1678ce3398da60748ea",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 0.965), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
