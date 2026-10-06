@@ -31,7 +31,7 @@ description: Brazilian financial-market data REST API serving equities, real-est
   package) for AI agents.
 url: https://raw.githubusercontent.com/api-evangelist/bolsai/refs/heads/main/apis.yml
 created: '2026-07-06'
-modified: '2026-09-03'
+modified: '2026-10-06'
 specificationVersion: '0.23'
 tags:
 - Finance
@@ -599,6 +599,8 @@ generated:
   confidence: 90
   at: '2026-07-06T15:21:36.821Z'
 common:
+- url: https://usebolsai.com/rss.xml
+  type: BlogRSS
 - type: CapabilityMap
   url: capabilities/bolsai-capability-edges.yml
   name: Bolsai Business Capability Map
