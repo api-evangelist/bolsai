@@ -55,3 +55,30 @@ notes: >-
   Pricing is published on the landing page #pricing section (no standalone
   /pricing page — it 404s). Checkout runs through Stripe
   (GET|POST /api/v1/billing/checkout, portal at /api/v1/billing/portal).
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - hybrid
+  - metered
+  - subscription
+  units: []
+  plans:
+  - name: Free
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
+  - name: Pro
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods: []
+  - name: Enterprise
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
