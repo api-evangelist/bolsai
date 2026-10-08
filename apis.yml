@@ -599,6 +599,10 @@ generated:
   confidence: 90
   at: '2026-07-06T15:21:36.821Z'
 common:
+- type: Plans
+  url: plans/bolsai-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/bolsai-rate-limits.yml
 - url: https://usebolsai.com/rss.xml
   type: BlogRSS
 - type: CapabilityMap
