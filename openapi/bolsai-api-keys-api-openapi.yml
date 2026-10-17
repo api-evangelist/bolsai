@@ -157,7 +157,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    KeyListItem:
+    KeySecretResponse:
       properties:
         id:
           type: integer
@@ -165,61 +165,16 @@ components:
         label:
           type: string
           title: Label
-        key_masked:
+        key:
           type: string
-          title: Key Masked
-        is_active:
-          type: boolean
-          title: Is Active
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        last_used_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Used At
+          title: Key
       type: object
       required:
       - id
       - label
-      - key_masked
-      - is_active
-      - created_at
-      - last_used_at
-      title: KeyListItem
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    UsageResponse:
-      properties:
-        tier:
-          type: string
-          title: Tier
-        used_today:
-          type: integer
-          title: Used Today
-        daily_limit:
-          type: integer
-          title: Daily Limit
-        remaining:
-          type: integer
-          title: Remaining
-      type: object
-      required:
-      - tier
-      - used_today
-      - daily_limit
-      - remaining
-      title: UsageResponse
+      - key
+      title: KeySecretResponse
+      description: Returned only when creating or rotating — full secret shown once.
     ValidationError:
       properties:
         loc:
@@ -257,7 +212,37 @@ components:
       required:
       - label
       title: CreateKeyRequest
-    KeySecretResponse:
+    UsageResponse:
+      properties:
+        tier:
+          type: string
+          title: Tier
+        used_today:
+          type: integer
+          title: Used Today
+        daily_limit:
+          type: integer
+          title: Daily Limit
+        remaining:
+          type: integer
+          title: Remaining
+      type: object
+      required:
+      - tier
+      - used_today
+      - daily_limit
+      - remaining
+      title: UsageResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    KeyListItem:
       properties:
         id:
           type: integer
@@ -265,16 +250,31 @@ components:
         label:
           type: string
           title: Label
-        key:
+        key_masked:
           type: string
-          title: Key
+          title: Key Masked
+        is_active:
+          type: boolean
+          title: Is Active
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        last_used_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Used At
       type: object
       required:
       - id
       - label
-      - key
-      title: KeySecretResponse
-      description: Returned only when creating or rotating — full secret shown once.
+      - key_masked
+      - is_active
+      - created_at
+      - last_used_at
+      title: KeyListItem
   securitySchemes:
     ApiKeyHeader:
       type: apiKey

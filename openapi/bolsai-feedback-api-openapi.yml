@@ -218,35 +218,6 @@ paths:
       - ApiKeyHeader: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    Body_submit_feedback_api_v1_feedback__post:
-      properties:
-        category:
-          type: string
-          title: Category
-          default: geral
-        message:
-          type: string
-          title: Message
-        files:
-          items:
-            type: string
-            contentMediaType: application/octet-stream
-          type: array
-          title: Files
-          default: []
-      type: object
-      required:
-      - message
-      title: Body_submit_feedback_api_v1_feedback__post
     ValidationError:
       properties:
         loc:
@@ -273,6 +244,35 @@ components:
       - msg
       - type
       title: ValidationError
+    Body_submit_feedback_api_v1_feedback__post:
+      properties:
+        category:
+          type: string
+          title: Category
+          default: geral
+        message:
+          type: string
+          title: Message
+        files:
+          items:
+            type: string
+            contentMediaType: application/octet-stream
+          type: array
+          title: Files
+          default: []
+      type: object
+      required:
+      - message
+      title: Body_submit_feedback_api_v1_feedback__post
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ReplyRequest:
       properties:
         message:
