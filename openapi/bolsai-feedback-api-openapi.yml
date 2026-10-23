@@ -297,3 +297,9 @@ components:
       in: header
       name: X-API-Key
       description: Get your key at POST /api/v1/keys/register
+x-provenance:
+  method: harvested
+  publisher: Bolsai
+  source: https://api.usebolsai.com/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
